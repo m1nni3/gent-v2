@@ -1097,6 +1097,11 @@ button.project-card:hover { border-color: var(--primary); }
 //  FILE UPLOAD (form_upload.html)
 // ────────────────────────
 .dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
   border: 2px dashed var(--border-color);
   border-radius: var(--radius-lg);
   padding: 40px 24px;
