@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Property Detail | Gentelella v4</title>
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main-v4.js"></script>
+</head>
+<body data-shell="admin" data-page="property-detail" data-breadcrumb="Home > Property Dashboard > Property Detail">
+
+  <main class="main">
+    <div class="page-wrapper">
+
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <div class="page-pretitle">Property Management</div>
+            <h1 class="page-title">Property Detail: #P-8421</h1>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-outline">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h8v8H4z"/></svg>
+              View Photos
+            </button>
+            <button class="btn btn-outline">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M2 8h12"/></svg>
+              Export Details
+            </button>
+            <button class="btn btn-primary" data-modal="edit-property">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h10M3 10h10M8 3l5 14M8 17l5-14"/></svg>
+              Edit Property
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row col-8-4">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Property Information</div>
+              <div class="card-subtitle">Basic details and classification</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;gap:24px;margin-bottom:24px">
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Property ID</div>
+                <div style="font-size:14px;font-weight:500">#P-8421</div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Status</div>
+                <span class="status status-green">Occupied</span>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Type</div>
+                <div style="font-size:14px;font-weight:500">Single Family</div>
+              </div>
+              <div style="flex:1">
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Added Date</div>
+                <div style="font-size:14px;font-weight:500">Dec 14, 2024</div>
+              </div>
+            </div>
+
+            <div style="margin-bottom:24px">
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Address</div>
+              <div style="font-size:14px;font-weight:500">123 Main Street, New York, NY 10001</div>
+            </div>
+
+            <div style="margin-bottom:24px">
+              <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Description</div>
+              <div style="font-size:14px;line-height:1.5">Beautiful 3-bedroom, 2-bath single family home with modern kitchen, spacious living areas, and a private backyard. Located in a prime neighborhood with excellent schools and transportation access.</div>
+            </div>
+
+            <div style="display:grid;grid-template-columns:repeat(2, 1fr);gap:16px">
+              <div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Square Feet</div>
+                <div style="font-size:14px;font-weight:500">2,450 sq ft</div>
+              </div>
+              <div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Lot Size</div>
+                <div style="font-size:14px;font-weight:500">0.25 acres</div>
+              </div>
+              <div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Bedrooms</div>
+                <div style="font-size:14px;font-weight:500">3</div>
+              </div>
+              <div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Bathrooms</div>
+                <div style="font-size:14px;font-weight:500">2</div>
+              </div>
+              <div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Year Built</div>
+                <div style="font-size:14px;font-weight:500">2010</div>
+              </div>
+              <div>
+                <div style="font-size:13px;color:var(--text-muted);margin-bottom:8px">Property Tax</div>
+                <div style="font-size:14px;font-weight:500">$12,500/year</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Financial Summary</div>
+              <div class="card-subtitle">Current and projected financials</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div class="finance-row">
+                <div class="finance-label">Monthly Rent</div>
+                <div class="finance-value">$3,450</div>
+              </div>
+              <div class="finance-row">
+                <div class="finance-label">Monthly Utilities</div>
+                <div class="finance-value">$320</div>
+              </div>
+              <div class="finance-row">
+                <div class="finance-label">Monthly Maintenance</div>
+                <div class="finance-value">$180</div>
+              </div>
+              <div class="finance-row">
+                <div class="finance-label">Monthly Property Management</div>
+                <div class="finance-value">$95</div>
+              </div>
+              <div class="finance-row">
+                <div class="finance-label">Monthly Income</div>
+                <div class="finance-value">$3,450</div>
+              </div>
+              <div class="finance-row">
+                <div class="finance-label">Monthly Expenses</div>
+                <div class="finance-value">$695</div>
+              </div>
+              <div class="finance-row" style="border-top:1px solid var(--border-color);padding-top:12px">
+                <div class="finance-label">Net Monthly Income</div>
+                <div class="finance-value" style="color:var(--green)">$2,755</div>
+              </div>
+              <div class="finance-row">
+                <div class="finance-label">Annual Net Income</div>
+                <div class="finance-value">$33,060</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row col-3">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Value History</div></div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="value-history-row">
+                <div class="value-history-date">Dec 2024</div>
+                <div class="value-history-value">$485,000</div>
+                <div class="value-history-change up">+2.1%</div>
+              </div>
+              <div class="value-history-row">
+                <div class="value-history-date">Nov 2024</div>
+                <div class="value-history-value">$475,000</div>
+                <div class="value-history-change up">+5.3%</div>
+              </div>
+              <div class="value-history-row">
+                <div class="value-history-date">Oct 2024</div>
+                <div class="value-history-value">$450,000</div>
+                <div class="value-history-change down">-1.2%</div>
+              </div>
+              <div class="value-history-row">
+                <div class="value-history-date">Sep 2024</div>
+                <div class="value-history-value">$455,000</div>
+                <div class="value-history-change up">+3.8%</div>
+              </div>
+              <div class="value-history-row">
+                <div class="value-history-date">Aug 2024</div>
+                <div class="value-history-value">$438,000</div>
+                <div class="value-history-change down">-3.5%</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Tenant Information</div></div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px">
+              <div class="activity-avatar" style="background:linear-gradient(135deg,var(--primary),var(--primary-dk));width:40px;height:40px;font-size:16px">SK</div>
+              <div>
+                <div style="font-weight:500">Sarah Johnson</div>
+                <div style="font-size:12px;color:var(--text-muted)">Lease until: Dec 2025</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+              <div><strong>Phone:</strong> (555) 123-4567</div>
+              <div><strong>Email:</strong> sarah.j@email.com</div>
+              <div><strong>Lease Start:</strong> Jan 2024</div>
+              <div><strong>Monthly Rent:</strong> $3,450</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Quick Actions</div></div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <button class="btn btn-primary btn-block" data-modal="add-payment">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-right:8px"><path d="M4 4h8v8H4z"/></svg>
+                Record Payment
+              </button>
+              <button class="btn btn-outline btn-block" data-modal="add-note">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-right:8px"><path d="M4 4h8v8H4z"/></svg>
+                Add Note
+              </button>
+              <button class="btn btn-outline btn-block" data-modal="schedule-inspection">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-right:8px"><path d="M8 2v12M2 8h12"/></svg>
+                Schedule Inspection
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

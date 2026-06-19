@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Debrief | Gentelella v4</title>
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main-v4.js"></script>
+</head>
+<body data-shell="admin" data-page="debrief" data-breadcrumb="Home > Debrief">
+
+  <main class="main">
+    <div class="page-wrapper">
+
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <div class="page-pretitle">Operations</div>
+            <h1 class="page-title">Debrief & Reports</h1>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-outline">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M2 8h12"/></svg>
+              Export Summary
+            </button>
+            <button class="btn btn-primary" data-modal="new-debrief">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8M8 4v8"/></svg>
+              New Debrief
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row col-3">
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 8 14"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Pending Reviews</div>
+              <div class="stat-value-row">
+                <span class="stat-value">12</span>
+                <span class="stat-change up"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3M3 6l3-3 3 3"/></svg>3</span>
+              </div>
+              <div class="stat-subtext">New since last week</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Completed</div>
+              <div class="stat-value-row">
+                <span class="stat-value">89</span>
+                <span class="stat-change up"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3M3 6l3-3 3 3"/></svg>15%</span>
+              </div>
+              <div class="stat-subtext">This quarter</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon yellow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Issues Raised</div>
+              <div class="stat-value-row">
+                <span class="stat-value">34</span>
+                <span class="stat-change down"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6M3 6l3 3 3-3"/></svg>8%</span>
+              </div>
+              <div class="stat-subtext">24 resolved, 10 open</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Reports Generated</div>
+              <div class="stat-value-row">
+                <span class="stat-value">18</span>
+                <span class="stat-change up"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3M3 6l3-3 3 3"/></svg>5</span>
+              </div>
+              <div class="stat-subtext">This month</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">Debrief Calendar</div>
+            <div class="card-subtitle">Scheduled reviews and reports</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <select class="form-select" style="width:120px">
+              <option>This Week</option>
+              <option>This Month</option>
+              <option>Next Month</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="calendar-grid" style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+            <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0">Mon</div>
+            <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0">Tue</div>
+            <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0">Wed</div>
+            <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0">Thu</div>
+            <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0">Fri</div>
+            <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0">Sat</div>
+            <div style="text-align:center;font-size:11px;color:var(--text-muted);padding:8px 0">Sun</div>
+            <div class="cal-day other-month">29</div>
+            <div class="cal-day other-month">30</div>
+            <div class="cal-day">1</div>
+            <div class="cal-day">2</div>
+            <div class="cal-day">3</div>
+            <div class="cal-day">4</div>
+            <div class="cal-day">5</div>
+            <div class="cal-day">6</div>
+            <div class="cal-day">7</div>
+            <div class="cal-day">8</div>
+            <div class="cal-day">9</div>
+            <div class="cal-day">10</div>
+            <div class="cal-day">11</div>
+            <div class="cal-day">12</div>
+            <div class="cal-day">13</div>
+            <div class="cal-day today" style="position:relative">
+              14
+              <div style="position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--primary)"></div>
+            </div>
+            <div class="cal-day">15</div>
+            <div class="cal-day" style="position:relative">
+              16
+              <div style="position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:4px;height:4px;border-radius:50%;background:var(--green)"></div>
+            </div>
+            <div class="cal-day">17</div>
+            <div class="cal-day">18</div>
+            <div class="cal-day">19</div>
+            <div class="cal-day">20</div>
+            <div class="cal-day">21</div>
+            <div class="cal-day">22</div>
+            <div class="cal-day">23</div>
+            <div class="cal-day">24</div>
+            <div class="cal-day">25</div>
+            <div class="cal-day">26</div>
+            <div class="cal-day">27</div>
+            <div class="cal-day">28</div>
+            <div class="cal-day">29</div>
+            <div class="cal-day">30</div>
+            <div class="cal-day">31</div>
+            <div class="cal-day other-month">1</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row col-8-4">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Recent Debriefs</div>
+              <div class="card-subtitle">Latest completed reviews</div>
+            </div>
+          </div>
+          <div class="card-body" style="padding:8px 16px">
+            <ul class="activity-list">
+              <li class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,var(--primary),var(--primary-dk))">JD</div>
+                <div>
+                  <div class="activity-body"><strong>Q4 Property Review</strong> — All properties reviewed for performance metrics</div>
+                  <div class="activity-time">2 days ago</div>
+                </div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,var(--blue),#0550a0)">MG</div>
+                <div>
+                  <div class="activity-body"><strong>Maintenance Audit</strong> — Q4 maintenance schedules and costs audited</div>
+                  <div class="activity-time">5 days ago</div>
+                </div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,var(--green),#1a8a32)">AR</div>
+                <div>
+                  <div class="activity-body"><strong>Financial Close</strong> — November financials reconciled</div>
+                  <div class="activity-time">1 week ago</div>
+                </div>
+              </li>
+              <li class="activity-item">
+                <div class="activity-avatar" style="background:linear-gradient(135deg,var(--yellow),#c97f00)">SK</div>
+                <div>
+                  <div class="activity-body"><strong>Tenant Satisfaction</strong> — Survey results reviewed for all occupied units</div>
+                  <div class="activity-time">2 weeks ago</div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Upcoming</div>
+              <div class="card-subtitle">Scheduled reviews</div>
+            </div>
+          </div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="task-row">
+                <div class="todo-cb"></div>
+                <div style="flex:1">
+                  <div style="font-weight:500">Lease Renewal Audit</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Dec 16, 2024</div>
+                </div>
+              </div>
+              <div class="task-row">
+                <div class="todo-cb"></div>
+                <div style="flex:1">
+                  <div style="font-weight:500">Property Inspection Debrief</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Dec 18, 2024</div>
+                </div>
+              </div>
+              <div class="task-row">
+                <div class="todo-cb"></div>
+                <div style="flex:1">
+                  <div style="font-weight:500">Year-End Financial Review</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Dec 30, 2024</div>
+                </div>
+              </div>
+              <div class="task-row">
+                <div class="todo-cb done" style="color:white;background:var(--green)"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 6l2.5 3 5-6"/></svg></div>
+                <div style="flex:1;text-decoration:line-through;opacity:0.6">
+                  <div>Q3 Tax Filing</div>
+                  <div style="font-size:12px;color:var(--text-muted)">Completed Dec 12</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

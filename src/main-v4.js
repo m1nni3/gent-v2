@@ -14,8 +14,7 @@ initCharts();
 initTables();
 initCommandPalette();
 initPageActions();
-
-// Service worker — only in production builds (skip on dev so HMR isn't fought
+import('./v4/property-actions.js').then((m) => m.initPropertyActions());
 // by the cache). Path uses Vite's BASE_URL so subpath deploys (e.g.
 // preview.colorlib.com/theme/foo/) register the SW at the right scope.
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
@@ -37,6 +36,9 @@ if (document.querySelector('.settings-content')) {
 }
 if (document.querySelector('[data-date-range], [data-rich-text], [data-multi-select]')) {
   import('./v4/form-controls.js').then((m) => m.initFormControls());
+}
+if (document.querySelector('[data-page="properties-dashboard"]')) {
+  import('./v4/property-dashboard.js').then((m) => m.initPropertyDashboard());
 }
 
 // ────────────────────────

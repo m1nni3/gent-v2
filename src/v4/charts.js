@@ -869,7 +869,123 @@ function gantt(echarts, el, t) {
   return chart;
 }
 
+// ────────────────────────
+//  Property Management Charts
+// ────────────────────────
+
+function propertyValueTrend(echarts, el, t) {
+  const months = ['Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const values = [420000, 438000, 455000, 450000, 475000, 485000];
+  const chart = echarts.init(el);
+  chart.setOption({
+    ...baseOption(t),
+    tooltip: { ...baseOption(t).tooltip, trigger: 'axis', valueFormatter: (v) => '$' + v.toLocaleString() },
+    xAxis: {
+      type: 'category', data: months, boundaryGap: false,
+      axisLine: { lineStyle: { color: t.borderLight } },
+      axisTick: { show: false },
+      axisLabel: { color: t.textMuted, fontSize: 10 }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: t.borderLight, type: [4, 3] } },
+      axisLabel: { color: t.textMuted, fontSize: 10, formatter: (v) => '$' + (v / 1000) + 'K' },
+      axisLine: { show: false }, axisTick: { show: false }
+    },
+    series: [{
+      type: 'line', smooth: true, showSymbol: true, symbol: 'circle', symbolSize: 6,
+      data: values,
+      lineStyle: { color: t.primary, width: 2 },
+      itemStyle: { color: t.primary, borderColor: t.bgSurface, borderWidth: 2 },
+      areaStyle: {
+        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          { offset: 0, color: t.primary + '33' },
+          { offset: 1, color: t.primary + '00' }
+        ])
+      }
+    }]
+  });
+  return chart;
+}
+
+function revenueTrend(echarts, el, t) {
+  const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const revenue = [2100000, 2400000, 2800000, 3100000, 3400000, 3700000, 3900000, 4100000, 4300000, 4500000, 4700000, 4850000];
+  const expenses = [1200000, 1250000, 1300000, 1350000, 1320000, 1280000, 1250000, 1220000, 1180000, 1150000, 1120000, 1080000];
+  const chart = echarts.init(el);
+  chart.setOption({
+    ...baseOption(t),
+    tooltip: { ...baseOption(t).tooltip, trigger: 'axis', valueFormatter: (v) => '$' + v.toLocaleString() },
+    legend: {
+      data: ['Revenue', 'Expenses'], bottom: 0, icon: 'circle', itemWidth: 8, itemHeight: 8,
+      textStyle: { color: t.textMuted, fontSize: 11 }
+    },
+    xAxis: {
+      type: 'category', data: months, boundaryGap: false,
+      axisLine: { lineStyle: { color: t.borderLight } },
+      axisTick: { show: false },
+      axisLabel: { color: t.textMuted, fontSize: 10 }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: { lineStyle: { color: t.borderLight, type: [4, 3] } },
+      axisLabel: { color: t.textMuted, fontSize: 10, formatter: (v) => '$' + (v / 1000000).toFixed(1) + 'M' },
+      axisLine: { show: false }, axisTick: { show: false }
+    },
+    series: [
+      {
+        name: 'Revenue', type: 'line', smooth: true, showSymbol: false,
+        data: revenue,
+        lineStyle: { color: t.green, width: 2 },
+        itemStyle: { color: t.green },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            { offset: 0, color: t.green + '33' },
+            { offset: 1, color: t.green + '00' }
+          ])
+        }
+      },
+      {
+        name: 'Expenses', type: 'line', smooth: true, showSymbol: false,
+        data: expenses,
+        lineStyle: { color: t.red, width: 1.5, type: 'dashed' },
+        itemStyle: { color: t.red }
+      }
+    ]
+  });
+  return chart;
+}
+
+function expensePie(echarts, el, t) {
+  const chart = echarts.init(el);
+  chart.setOption({
+    textStyle: { fontFamily, color: t.textMuted },
+    tooltip: { ...baseOption(t).tooltip, trigger: 'item', formatter: '{b}: {c} ({d}%)' },
+    series: [{
+      type: 'pie', radius: ['45%', '70%'], avoidLabelOverlap: true,
+      itemStyle: { borderRadius: 4, borderColor: t.bgSurface, borderWidth: 2 },
+      label: { show: false },
+      emphasis: {
+        label: { show: true, fontSize: 13, fontWeight: 700, color: t.text },
+        itemStyle: { shadowBlur: 10, shadowColor: 'rgba(0,0,0,0.2)' }
+      },
+      data: [
+        { value: 3400000, name: 'Maintenance', itemStyle: { color: t.primary } },
+        { value: 2100000, name: 'Property Tax', itemStyle: { color: t.azure } },
+        { value: 1200000, name: 'Insurance', itemStyle: { color: t.yellow } },
+        { value: 950000, name: 'Utilities', itemStyle: { color: t.green } },
+        { value: 680000, name: 'Management', itemStyle: { color: t.purple } },
+        { value: 240000, name: 'Other', itemStyle: { color: t.borderLight } }
+      ]
+    }]
+  });
+  return chart;
+}
+
 const charts = {
+  'property-value-trend': propertyValueTrend,
+  'revenue-trend':        revenueTrend,
+  'expense-pie':          expensePie,
   'dashboard-network': dashboardNetwork,
   'revenue-line':      revenueLine,
   'sales-bar':         salesBar,
@@ -981,4 +1097,21 @@ export async function initCharts() {
   });
   themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
   document.documentElement.addEventListener('themechange', rebuild);
+
+  // Store instances for external modules to update chart data
+  instances = mounted;
 }
+/**
+ * Returns the chart instance for a given data-chart id, or null if not found.
+ * Allows modules like property-dashboard.js to update chart data after init.
+ * @param {string} id The data-chart attribute value
+ * @returns {object|null} ECharts instance or null
+ */
+export function getChartInstance(id) {
+  if (!instances) {return null;}
+  const match = instances.find((m) => m.el?.dataset?.chart === id);
+  return match ? match.instance : null;
+}
+
+/** @type {Array<{el: HTMLElement, factory: Function, instance: object}>|null} */
+let instances = null;

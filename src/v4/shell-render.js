@@ -13,6 +13,20 @@ export const NAV = [
     label: 'General',
     items: [
       {
+        text: 'Property Management', icon: 'projects',
+        children: [
+          { key: 'properties-dashboard', href: 'properties-dashboard.html', text: 'Property Dashboard' },
+          { key: 'property-detail',      href: 'properties-detail.html',    text: 'Property Detail' },
+          { key: 'finances',             href: 'finances.html',             text: 'Finances' },
+          { key: 'finances-entries',     href: 'finances-entries.html',     text: 'Financial Entries' },
+          { key: 'contacts',             href: 'contacts.html',             text: 'Contacts' },
+          { key: 'petty-cash',           href: 'petty-cash.html',           text: 'Petty Cash' },
+          { key: 'portals',              href: 'portals.html',              text: 'Portals' },
+          { key: 'debrief',              href: 'debrief.html',              text: 'Debrief' },
+          { key: 'governance',           href: 'governance.html',           text: 'Governance' }
+        ]
+      },
+      {
         text: 'Dashboards', icon: 'dashboard',
         children: [
           { key: 'dashboard',   href: 'index.html',  text: 'Operations' },

@@ -1,91 +1,185 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Users | Gentelella 2026 v4</title>
-<link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<script type="module" src="/src/main-v4.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contacts | Gentelella v4</title>
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main-v4.js"></script>
 </head>
-<body data-shell="admin" data-page="users" data-breadcrumb="Home > Users">
+<body data-shell="admin" data-page="contacts" data-breadcrumb="Home > Contacts">
 
-<main class="main">
-<div class="page-wrapper">
+  <main class="main">
+    <div class="page-wrapper">
 
-  <div class="page-header">
-    <div class="page-header-row">
-      <div>
-        <div class="page-pretitle">Team</div>
-        <h1 class="page-title">Users</h1>
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <div class="page-pretitle">Contact Management</div>
+            <h1 class="page-title">Contacts</h1>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-outline">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M2 8h12"/></svg>
+              Export Contacts
+            </button>
+            <button class="btn btn-primary" data-modal="add-contact">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8M8 4v8"/></svg>
+              Add Contact
+            </button>
+          </div>
+        </div>
       </div>
-      <div class="page-actions">
-        <button class="btn btn-outline">Import CSV</button>
-        <button class="btn btn-primary">
-          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8M8 4v8"/></svg>
-          Invite user
-        </button>
+
+      <div class="row col-3">
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M5 20c0-3.9 3.1-7 7-7s7 3.1 7 7"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Total Contacts</div>
+              <div class="stat-value-row">
+                <span class="stat-value">892</span>
+                <span class="stat-change up"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3M3 6l3-3 3 3"/></svg>8%</span>
+              </div>
+              <div class="stat-subtext">+42 this month</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Tenants</div>
+              <div class="stat-value-row">
+                <span class="stat-value">645</span>
+                <span class="stat-change up"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3M3 6l3-3 3 3"/></svg>5%</span>
+              </div>
+              <div class="stat-subtext">72% of contacts</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon yellow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 12V8a3 3 0 00-3-3H5a3 3 0 00-3 3v4"/><path d="M22 12v4a3 3 0 01-3 3H5a3 3 0 01-3-3v-4"/><circle cx="12" cy="12" r="3"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Vendors</div>
+              <div class="stat-value-row">
+                <span class="stat-value">158</span>
+                <span class="stat-change down"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6M3 6l3 3 3-3"/></svg>2%</span>
+              </div>
+              <div class="stat-subtext">18% of contacts</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 4h7l2 3h9v11H3V4z"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Staff</div>
+              <div class="stat-value-row">
+                <span class="stat-value">89</span>
+                <span class="stat-change up"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V3M3 6l3-3 3 3"/></svg>3%</span>
+              </div>
+              <div class="stat-subtext">10% of contacts</div>
+            </div>
+          </div>
+        </div>
       </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">All Contacts</div>
+            <div class="card-subtitle">Search, filter, and manage your contacts</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <select class="form-select" style="width:140px">
+              <option>All Roles</option>
+              <option>Tenant</option>
+              <option>Vendor</option>
+              <option>Staff</option>
+              <option>Owner</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table" data-datatable data-page-length="15" data-export="contacts">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Role</th>
+                  <th>Status</th>
+                  <th>Properties</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><div class="cell-customer"><div class="cell-avatar" style="background:var(--primary)">SK</div><span class="cell-strong">Sarah K.</span></div></td>
+                  <td>sarah.k@email.com</td>
+                  <td>(555) 123-4567</td>
+                  <td><span class="status status-green">Tenant</span></td>
+                  <td><span class="status status-green">Active</span></td>
+                  <td>123 Main St</td>
+                  <td><button class="btn btn-outline btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="cell-customer"><div class="cell-avatar" style="background:var(--azure)">MR</div><span class="cell-strong">Mike Repair Co</span></div></td>
+                  <td>service@mikerepair.com</td>
+                  <td>(555) 987-6543</td>
+                  <td><span class="status status-blue">Vendor</span></td>
+                  <td><span class="status status-green">Active</span></td>
+                  <td>Multiple</td>
+                  <td><button class="btn btn-outline btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="cell-customer"><div class="cell-avatar" style="background:var(--purple)">AL</div><span class="cell-strong">Amy Lee</span></div></td>
+                  <td>amy.lee@email.com</td>
+                  <td>(555) 456-7890</td>
+                  <td><span class="status status-green">Tenant</span></td>
+                  <td><span class="status status-yellow">Notice</span></td>
+                  <td>456 Park Ave</td>
+                  <td><button class="btn btn-outline btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="cell-customer"><div class="cell-avatar" style="background:var(--green)">PM</div><span class="cell-strong">Property Mgmt Co</span></div></td>
+                  <td>info@propertymgmt.com</td>
+                  <td>(555) 333-2222</td>
+                  <td><span class="status status-purple">Staff</span></td>
+                  <td><span class="status status-green">Active</span></td>
+                  <td>All</td>
+                  <td><button class="btn btn-outline btn-sm">View</button></td>
+                </tr>
+                <tr>
+                  <td><div class="cell-customer"><div class="cell-avatar" style="background:var(--red)">JW</div><span class="cell-strong">James Wilson</span></div></td>
+                  <td>jw@email.com</td>
+                  <td>(555) 222-1111</td>
+                  <td><span class="status status-green">Tenant</span></td>
+                  <td><span class="status status-green">Active</span></td>
+                  <td>789 Oak St</td>
+                  <td><button class="btn btn-outline btn-sm">View</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div>
-  </div>
-
-  <div class="row col-3" id="contacts-grid"></div>
-
-</div>
-</main>
-
-<script type="module">
-const people = [
-  ['Aigars Silkalns','A','primary','Admin','148','12','9'],
-  ['Sarah Kowalski','SK','azure','Designer','64','7','5'],
-  ['Michael Reyes','MR','purple','Engineer','98','11','4'],
-  ['Emily Wang','EW','yellow','PM','42','3','8'],
-  ['Mark Kim','MK','red','Engineer','71','6','2'],
-  ['Lina Park','LP','green','Marketing','38','9','6'],
-  ['Diego Reyes','DR','blue','Sales','83','14','11'],
-  ['Yuki Tanaka','YT','primary','Support','55','8','3'],
-  ['Tom Hardy','TH','purple','Engineer','67','5','7']
-];
-const colorMap = { primary:'linear-gradient(135deg,var(--primary),var(--primary-dk))', azure:'linear-gradient(135deg,var(--azure),#1d6fa5)', purple:'linear-gradient(135deg,var(--purple),#8a2da0)', yellow:'linear-gradient(135deg,var(--yellow),#c97f00)', red:'linear-gradient(135deg,var(--red),#a82b2b)', green:'linear-gradient(135deg,var(--green),#1a8a32)', blue:'linear-gradient(135deg,var(--blue),#0550a0)' };
-
-const grid = document.getElementById('contacts-grid');
-grid.innerHTML = people.map(([name, ini, col, role, projects, tasks, msgs], idx) => `
-  <div class="contact-card" data-idx="${idx}">
-    <div class="av" style="background:${colorMap[col]}">${ini}</div>
-    <div class="name">${name}</div>
-    <div class="role">${role}</div>
-    <div style="display:flex;gap:6px;justify-content:center;margin-bottom:12px">
-      <button class="btn btn-outline btn-sm" data-action="message">Message</button>
-      <button class="btn btn-primary btn-sm" data-action="view">View</button>
-    </div>
-    <div class="stats">
-      <div><strong>${projects}</strong>Projects</div>
-      <div><strong>${tasks}</strong>Tasks</div>
-      <div><strong>${msgs}</strong>Messages</div>
-    </div>
-  </div>
-`).join('');
-
-import('/src/v4/details.js').then(({ openContactModal }) => {
-  grid.addEventListener('click', (e) => {
-    const card = e.target.closest('.contact-card');
-    if (!card) return;
-    const idx = parseInt(card.dataset.idx, 10);
-    const p = people[idx];
-    if (!p) return;
-    const action = e.target.closest('[data-action]')?.dataset.action;
-    const [name, ini, col, role, projectsCount, tasks, msgs] = p;
-    // Both buttons + plain card click open the modal; the modal exposes
-    // Message/View actions of its own.
-    if (action === 'message' || action === 'view' || !e.target.closest('button')) {
-      e.preventDefault();
-      openContactModal({ name, ini, color: col, role, projects: projectsCount, tasks, msgs });
-    }
-  });
-});
-</script>
-
+  </main>
 </body>
 </html>

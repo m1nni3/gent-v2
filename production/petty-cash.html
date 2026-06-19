@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petty Cash | Gentelella v4</title>
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main-v4.js"></script>
+</head>
+<body data-shell="admin" data-page="petty-cash" data-breadcrumb="Home > Petty Cash">
+
+  <main class="main">
+    <div class="page-wrapper">
+
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <div class="page-pretitle">Financial Management</div>
+            <h1 class="page-title">Petty Cash</h1>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-outline">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M2 8h12"/></svg>
+              Export
+            </button>
+            <button class="btn btn-primary" data-modal="add-expense">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8M8 4v8"/></svg>
+              Add Expense
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="row col-3">
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Current Balance</div>
+              <div class="stat-value-row">
+                <span class="stat-value">$3,450</span>
+              </div>
+              <div class="stat-subtext">Available for expenses</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon red">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">This Month</div>
+              <div class="stat-value-row">
+                <span class="stat-value">$1,240</span>
+                <span class="stat-change down"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 3v6M3 6l3 3 3-3"/></svg>15%</span>
+              </div>
+              <div class="stat-subtext">Used from budget</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 100 7h5a3.5 3.5 0 010 7H6"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Monthly Budget</div>
+              <div class="stat-value-row">
+                <span class="stat-value">$5,000</span>
+              </div>
+              <div class="stat-subtext">75.2% remaining</div>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="stat">
+            <div class="stat-icon yellow">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>
+            </div>
+            <div class="stat-content">
+              <div class="stat-label">Pending Approval</div>
+              <div class="stat-value-row">
+                <span class="stat-value">$680</span>
+              </div>
+              <div class="stat-subtext">4 receipts pending</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row col-8-4">
+        <div class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Recent Expenses</div>
+              <div class="card-subtitle">Latest petty cash transactions</div>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table" data-datatable data-page-length="10" data-export="petty-cash">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Category</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Requested By</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Dec 14</td>
+                    <td><span class="cell-strong">Office supplies</span></td>
+                    <td><span class="status status-blue">Supplies</span></td>
+                    <td class="cell-strong">$45.00</td>
+                    <td><span class="status status-green">Approved</span></td>
+                    <td>John D.</td>
+                  </tr>
+                  <tr>
+                    <td>Dec 13</td>
+                    <td><span class="cell-strong">Cleaning materials</span></td>
+                    <td><span class="status status-blue">Cleaning</span></td>
+                    <td class="cell-strong">$128.00</td>
+                    <td><span class="status status-yellow">Pending</span></td>
+                    <td>Maria G.</td>
+                  </tr>
+                  <tr>
+                    <td>Dec 12</td>
+                    <td><span class="cell-strong">Parking fees</span></td>
+                    <td><span class="status status-blue">Parking</span></td>
+                    <td class="cell-strong">$15.00</td>
+                    <td><span class="status status-green">Approved</span></td>
+                    <td>Alex T.</td>
+                  </tr>
+                  <tr>
+                    <td>Dec 11</td>
+                    <td><span class="cell-strong">Light bulbs & fixtures</span></td>
+                    <td><span class="status status-blue">Maintenance</span></td>
+                    <td class="cell-strong">$67.00</td>
+                    <td><span class="status status-green">Approved</span></td>
+                    <td>Mike R.</td>
+                  </tr>
+                  <tr>
+                    <td>Dec 10</td>
+                    <td><span class="cell-strong">Postage & shipping</span></td>
+                    <td><span class="status status-blue">Admin</span></td>
+                    <td class="cell-strong">$32.50</td>
+                    <td><span class="status status-green">Approved</span></td>
+                    <td>Sarah K.</td>
+                  </tr>
+                  <tr>
+                    <td>Dec 09</td>
+                    <td><span class="cell-strong">Coffee & refreshments</span></td>
+                    <td><span class="status status-blue">Office</span></td>
+                    <td class="cell-strong">$22.00</td>
+                    <td><span class="status status-red">Rejected</span></td>
+                    <td>Tom L.</td>
+                  </tr>
+                  <tr>
+                    <td>Dec 08</td>
+                    <td><span class="cell-strong">Locksmith service</span></td>
+                    <td><span class="status status-blue">Maintenance</span></td>
+                    <td class="cell-strong">$95.00</td>
+                    <td><span class="status status-green">Approved</span></td>
+                    <td>Maria G.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><div class="card-title">Expense Categories</div></div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="cat-row"><div class="cat-label">Supplies</div><div class="cat-bar"><div class="fill" style="width:35%"></div></div><div class="cat-value">35%</div></div>
+              <div class="cat-row"><div class="cat-label">Maintenance</div><div class="cat-bar"><div class="fill" style="width:28%;background:var(--azure)"></div></div><div class="cat-value">28%</div></div>
+              <div class="cat-row"><div class="cat-label">Cleaning</div><div class="cat-bar"><div class="fill" style="width:18%;background:var(--yellow)"></div></div><div class="cat-value">18%</div></div>
+              <div class="cat-row"><div class="cat-label">Office</div><div class="cat-bar"><div class="fill" style="width:12%;background:var(--green)"></div></div><div class="cat-value">12%</div></div>
+              <div class="cat-row"><div class="cat-label">Admin</div><div class="cat-bar"><div class="fill" style="width:7%;background:var(--purple)"></div></div><div class="cat-value">7%</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

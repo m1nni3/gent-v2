@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portals | Gentelella v4</title>
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main-v4.js"></script>
+</head>
+<body data-shell="admin" data-page="portals" data-breadcrumb="Home > Portals">
+
+  <main class="main">
+    <div class="page-wrapper">
+
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <div class="page-pretitle">Access Management</div>
+            <h1 class="page-title">Portals</h1>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-primary" data-modal="add-portal">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8M8 4v8"/></svg>
+              Add Portal
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body" style="padding:16px">
+          <div style="display:flex;gap:16px;flex-wrap:wrap">
+            <div class="card" style="flex:1;min-width:240px;cursor:pointer" data-modal="edit-portal">
+              <div class="card-body" style="text-align:center">
+                <div style="font-size:28px;margin-bottom:8px">🏢</div>
+                <div class="card-title">Tenant Portal</div>
+                <div class="card-subtitle">Resident access & payments</div>
+                <div style="margin-top:12px"><span class="status status-green">Active</span></div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:8px">248 registered users</div>
+              </div>
+            </div>
+            <div class="card" style="flex:1;min-width:240px;cursor:pointer" data-modal="edit-portal">
+              <div class="card-body" style="text-align:center">
+                <div style="font-size:28px;margin-bottom:8px">🔧</div>
+                <div class="card-title">Maintenance Portal</div>
+                <div class="card-subtitle">Work order & service requests</div>
+                <div style="margin-top:12px"><span class="status status-green">Active</span></div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:8px">142 open requests</div>
+              </div>
+            </div>
+            <div class="card" style="flex:1;min-width:240px;cursor:pointer" data-modal="edit-portal">
+              <div class="card-body" style="text-align:center">
+                <div style="font-size:28px;margin-bottom:8px">💰</div>
+                <div class="card-title">Investor Portal</div>
+                <div class="card-subtitle">Performance & reporting</div>
+                <div style="margin-top:12px"><span class="status status-yellow">Maintenance</span></div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:8px">12 investors</div>
+              </div>
+            </div>
+            <div class="card" style="flex:1;min-width:240px;cursor:pointer" data-modal="edit-portal">
+              <div class="card-body" style="text-align:center">
+                <div style="font-size:28px;margin-bottom:8px">📋</div>
+                <div class="card-title">Vendor Portal</div>
+                <div class="card-subtitle">Procurement & invoicing</div>
+                <div style="margin-top:12px"><span class="status status-blue">In Development</span></div>
+                <div style="font-size:12px;color:var(--text-muted);margin-top:8px">Launching Q1 2025</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Portal Access Logs</div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table" data-datatable data-page-length="10">
+              <thead>
+                <tr>
+                  <th>Date/Time</th>
+                  <th>Portal</th>
+                  <th>User</th>
+                  <th>Action</th>
+                  <th>IP Address</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Dec 14, 10:23 AM</td>
+                  <td>Tenant</td>
+                  <td>sarah.k@email.com</td>
+                  <td>Payment</td>
+                  <td>192.168.1.45</td>
+                  <td><span class="status status-green">Success</span></td>
+                </tr>
+                <tr>
+                  <td>Dec 14, 09:15 AM</td>
+                  <td>Maintenance</td>
+                  <td>mike.r@email.com</td>
+                  <td>Work Order</td>
+                  <td>192.168.1.102</td>
+                  <td><span class="status status-green">Success</span></td>
+                </tr>
+                <tr>
+                  <td>Dec 13, 04:45 PM</td>
+                  <td>Investor</td>
+                  <td>john.doe@email.com</td>
+                  <td>Report View</td>
+                  <td>10.0.0.55</td>
+                  <td><span class="status status-green">Success</span></td>
+                </tr>
+                <tr>
+                  <td>Dec 13, 02:30 PM</td>
+                  <td>Tenant</td>
+                  <td>amy.lee@email.com</td>
+                  <td>Login</td>
+                  <td>192.168.1.78</td>
+                  <td><span class="status status-red">Failed</span></td>
+                </tr>
+                <tr>
+                  <td>Dec 12, 11:00 AM</td>
+                  <td>Tenant</td>
+                  <td>james.w@email.com</td>
+                  <td>Profile Update</td>
+                  <td>192.168.1.33</td>
+                  <td><span class="status status-green">Success</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>

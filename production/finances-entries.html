@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Financial Entries | Gentelella v4</title>
+  <link rel="icon" href="../images/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <script type="module" src="/src/main-v4.js"></script>
+</head>
+<body data-shell="admin" data-page="finances-entries" data-breadcrumb="Home > Finances > Entries">
+
+  <main class="main">
+    <div class="page-wrapper">
+
+      <div class="page-header">
+        <div class="page-header-row">
+          <div>
+            <div class="page-pretitle">Financial Management</div>
+            <h1 class="page-title">Financial Entries</h1>
+          </div>
+          <div class="page-actions">
+            <button class="btn btn-outline">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v12M2 8h12"/></svg>
+              Export CSV
+            </button>
+            <button class="btn btn-primary" data-modal="add-entry">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 8h8M8 4v8"/></svg>
+              Add Entry
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">All Entries</div>
+            <div class="card-subtitle">Complete financial transaction log</div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <select class="form-select" style="width:160px">
+              <option>All Types</option>
+              <option>Income</option>
+              <option>Expense</option>
+              <option>Transfer</option>
+            </select>
+            <select class="form-select" style="width:140px">
+              <option>Q4 2024</option>
+              <option>Q3 2024</option>
+              <option>Q2 2024</option>
+              <option>Q1 2024</option>
+            </select>
+            <input type="text" class="form-input" placeholder="Search entries..." style="width:200px">
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table" data-datatable data-page-length="25" data-export="financial-entries">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" aria-label="Select all"></th>
+                  <th>Date</th>
+                  <th>Entry ID</th>
+                  <th>Property</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-14</td>
+                  <td class="cell-mono">#E-1024</td>
+                  <td><div class="cell-customer"><span class="cell-strong">123 Main St</span></div></td>
+                  <td>Monthly rent payment</td>
+                  <td><span class="badge badge-teal">Rent</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$3,450.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Paid</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-13</td>
+                  <td class="cell-mono">#E-1023</td>
+                  <td><div class="cell-customer"><span class="cell-strong">456 Park Ave</span></div></td>
+                  <td>HVAC repair</td>
+                  <td><span class="badge badge-orange">Repair</span></td>
+                  <td class="cell-strong" style="color:var(--red)">-$1,200.00</td>
+                  <td><span class="status status-red">Expense</span></td>
+                  <td><span class="status status-green">Cleared</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-12</td>
+                  <td class="cell-mono">#E-1022</td>
+                  <td><div class="cell-customer"><span class="cell-strong">789 Oak St</span></div></td>
+                  <td>Property tax payment</td>
+                  <td><span class="badge badge-red">Tax</span></td>
+                  <td class="cell-strong" style="color:var(--red)">-$12,500.00</td>
+                  <td><span class="status status-red">Expense</span></td>
+                  <td><span class="status status-yellow">Pending</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-11</td>
+                  <td class="cell-mono">#E-1021</td>
+                  <td><div class="cell-customer"><span class="cell-strong">101 Pine St</span></div></td>
+                  <td>Insurance premium</td>
+                  <td><span class="badge badge-blue">Insurance</span></td>
+                  <td class="cell-strong" style="color:var(--red)">-$450.00</td>
+                  <td><span class="status status-red">Expense</span></td>
+                  <td><span class="status status-green">Cleared</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-10</td>
+                  <td class="cell-mono">#E-1020</td>
+                  <td><div class="cell-customer"><span class="cell-strong">202 Elm St</span></div></td>
+                  <td>Property sale proceeds</td>
+                  <td><span class="badge badge-green">Sale</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$125,000.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Cleared</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-09</td>
+                  <td class="cell-mono">#E-1019</td>
+                  <td><div class="cell-customer"><span class="cell-strong">123 Main St</span></div></td>
+                  <td>Late fee payment</td>
+                  <td><span class="badge badge-teal">Rent</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$150.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Paid</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-08</td>
+                  <td class="cell-mono">#E-1018</td>
+                  <td><div class="cell-customer"><span class="cell-strong">456 Park Ave</span></div></td>
+                  <td>Landscaping service</td>
+                  <td><span class="badge badge-orange">Maintenance</span></td>
+                  <td class="cell-strong" style="color:var(--red)">-$320.00</td>
+                  <td><span class="status status-red">Expense</span></td>
+                  <td><span class="status status-green">Cleared</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-07</td>
+                  <td class="cell-mono">#E-1017</td>
+                  <td><div class="cell-customer"><span class="cell-strong">789 Oak St</span></div></td>
+                  <td>Security deposit refund</td>
+                  <td><span class="badge badge-red">Deposit</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$2,500.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Paid</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-06</td>
+                  <td class="cell-mono">#E-1016</td>
+                  <td><div class="cell-customer"><span class="cell-strong">101 Pine St</span></div></td>
+                  <td>Water bill payment</td>
+                  <td><span class="badge badge-blue">Utilities</span></td>
+                  <td class="cell-strong" style="color:var(--red)">-$85.00</td>
+                  <td><span class="status status-red">Expense</span></td>
+                  <td><span class="status status-green">Cleared</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-05</td>
+                  <td class="cell-mono">#E-1015</td>
+                  <td><div class="cell-customer"><span class="cell-strong">202 Elm St</span></div></td>
+                  <td>Monthly rent payment</td>
+                  <td><span class="badge badge-teal">Rent</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$2,950.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Paid</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-04</td>
+                  <td class="cell-mono">#E-1014</td>
+                  <td><div class="cell-customer"><span class="cell-strong">123 Main St</span></div></td>
+                  <td>Property management fee</td>
+                  <td><span class="badge badge-red">Fee</span></td>
+                  <td class="cell-strong" style="color:var(--red)">-$95.00</td>
+                  <td><span class="status status-red">Expense</span></td>
+                  <td><span class="status status-green">Cleared</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-03</td>
+                  <td class="cell-mono">#E-1013</td>
+                  <td><div class="cell-customer"><span class="cell-strong">456 Park Ave</span></div></td>
+                  <td>Monthly rent payment</td>
+                  <td><span class="badge badge-teal">Rent</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$2,800.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Paid</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-02</td>
+                  <td class="cell-mono">#E-1012</td>
+                  <td><div class="cell-customer"><span class="cell-strong">789 Oak St</span></div></td>
+                  <td>Monthly rent payment</td>
+                  <td><span class="badge badge-teal">Rent</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$3,200.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Paid</span></td>
+                </tr>
+                <tr>
+                  <td><input type="checkbox" aria-label="Select row"></td>
+                  <td>2024-12-01</td>
+                  <td class="cell-mono">#E-1011</td>
+                  <td><div class="cell-customer"><span class="cell-strong">101 Pine St</span></div></td>
+                  <td>Monthly rent payment</td>
+                  <td><span class="badge badge-teal">Rent</span></td>
+                  <td class="cell-strong" style="color:var(--green)">+$2,600.00</td>
+                  <td><span class="status status-green">Income</span></td>
+                  <td><span class="status status-green">Paid</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="row col-8-4">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Quick Filter</div></div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:flex;flex-wrap:wrap;gap:8px">
+              <button class="chip active">All</button>
+              <button class="chip">Rent</button>
+              <button class="chip">Maintenance</button>
+              <button class="chip">Utilities</button>
+              <button class="chip">Insurance</button>
+              <button class="chip">Tax</button>
+              <button class="chip">Fees</button>
+              <button class="chip">Deposits</button>
+              <button class="chip">Repairs</button>
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">Entry Statistics</div></div>
+          <div class="card-body" style="padding:16px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="entry-stat-row">
+                <div class="entry-stat-label">Total Entries</div>
+                <div class="entry-stat-value">1,204</div>
+              </div>
+              <div class="entry-stat-row">
+                <div class="entry-stat-label">Income Entries</div>
+                <div class="entry-stat-value" style="color:var(--green)">842</div>
+              </div>
+              <div class="entry-stat-row">
+                <div class="entry-stat-label">Expense Entries</div>
+                <div class="entry-stat-value" style="color:var(--red)">362</div>
+              </div>
+              <div class="entry-stat-row">
+                <div class="entry-stat-label">Average Income</div>
+                <div class="entry-stat-value">$3,450</div>
+              </div>
+              <div class="entry-stat-row">
+                <div class="entry-stat-label">Average Expense</div>
+                <div class="entry-stat-value">$1,200</div>
+              </div>
+              <div class="entry-stat-row">
+                <div class="entry-stat-label">Pending Approvals</div>
+                <div class="entry-stat-value" style="color:var(--yellow)">18</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+</body>
+</html>
