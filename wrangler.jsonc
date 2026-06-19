@@ -1,4 +1,8 @@
 {
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "gent-v2",
+  "pages_build_output_dir": "dist",
+  "compatibility_date": "2026-06-19",
   "observability": {
     "enabled": false,
     "head_sampling_rate": 1,
@@ -13,5 +17,18 @@
       "persist": true,
       "head_sampling_rate": 1
     }
-  }
+  },
+  "kv_namespaces": [
+    {
+      "binding": "GENT_V2_KV",
+      "id": "a47aed10f59e40dea57d56c35a7586d3"
+    }
+  ],
+  "d1_databases": [
+    {
+      "binding": "gent_v2_db",
+      "database_name": "gent-v2-db",
+      "database_id": "6e7f739b-0832-41c5-9c4e-372deedc9d60"
+    }
+  ]
 }

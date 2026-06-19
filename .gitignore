@@ -30,4 +30,4 @@ JQUERY_ELIMINATION_PLAN.md
 # Local-only social-preview assets and tooling
 # (uploaded to GitHub repo settings directly, not referenced from any committed file)
 docs/social-preview.png
-scripts/social-preview.mjs
+scripts/social-preview.mjs.wrangler/
