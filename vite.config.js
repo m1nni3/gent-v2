@@ -2,13 +2,14 @@ import { defineConfig } from 'vite';
 import { visualizer } from 'rollup-plugin-visualizer';
 import { renderShell, parseShellAttrs } from './src/v4/shell-render.js';
 import { readdirSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 // Auto-detect every entry HTML in production/ and register it as a Rollup
 // input. Replaces the old hand-maintained 60-entry list — adding a new page
 // is now just dropping a file into production/.
 function discoverEntries() {
-  const dir = resolve(import.meta.dirname, 'production');
+  const dir = resolve(dirname(fileURLToPath(import.meta.url)), 'production');
   const out = {};
   for (const file of readdirSync(dir)) {
     if (!file.endsWith('.html')) continue;
