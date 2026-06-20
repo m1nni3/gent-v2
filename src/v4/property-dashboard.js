@@ -12,6 +12,10 @@ import { showToast } from './toast.js';
 import { showModal } from './modal.js';
 import { getChartInstance } from './charts.js';
 
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
 // ── Seed data ────────────────────────────────────────────────────────────
 
 const SEED = {
@@ -127,7 +131,7 @@ function renderStats(data) {
   // Update the chart stat header
   const chartStat = document.querySelector('.chart-stat');
   if (chartStat) {
-    chartStat.innerHTML = '$' + (avgValue / 1000).toFixed(0) + 'K <span style="font-size:13px;font-weight:500;color:var(--green)">0%</span>';
+    chartStat.innerHTML = escapeHtml('$' + (avgValue / 1000).toFixed(0) + 'K') + ' <span style="font-size:13px;font-weight:500;color:var(--green)">0%</span>';
   }
 }
 
@@ -176,12 +180,12 @@ function renderTable(props) {
     const added = p.added_date ? new Date(p.added_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—';
     return `
       <tr>
-        <td class="cell-mono">#P-${p.id}</td>
-        <td><div class="cell-customer"><div class="cell-avatar" style="background:${AVATAR_COLORS[avatarIdx]}">${abbr}</div><span class="cell-strong">${p.name || p.address || p.title || ''}</span></div></td>
-        <td>${p.type || '—'}</td>
-        <td class="cell-strong">$${(p.value || 0).toLocaleString()}</td>
-        <td><span class="status status-${cls}">${p.status || '—'}</span></td>
-        <td>${added}</td>
+        <td class="cell-mono">#P-${escapeHtml(String(p.id))}</td>
+        <td><div class="cell-customer"><div class="cell-avatar" style="background:${AVATAR_COLORS[avatarIdx]}">${escapeHtml(abbr)}</div><span class="cell-strong">${escapeHtml(p.name || p.address || p.title || '')}</span></div></td>
+        <td>${escapeHtml(p.type || '—')}</td>
+        <td class="cell-strong">$${escapeHtml((p.value || 0).toLocaleString())}</td>
+        <td><span class="status status-${cls}">${escapeHtml(p.status || '—')}</span></td>
+        <td>${escapeHtml(added)}</td>
       </tr>`;
   }).join('');
 
@@ -255,14 +259,14 @@ function renderActivities(data) {
     const colorIdx = Math.abs(tx.id || 0) % AVATAR_COLORS.length;
     const time = tx.date ? relativeTime(tx.date) : 'recent';
     const body = tx.type === 'Income'
-      ? `<strong>Payment</strong> received — <strong>$${(tx.amount || 0).toLocaleString()}</strong> from <strong>${tx.property || 'Unknown'}</strong>`
-      : `<strong>${tx.contact || tx.description}</strong> — <strong>$${(tx.amount || 0).toLocaleString()}</strong>`;
+      ? `<strong>Payment</strong> received — <strong>$${escapeHtml((tx.amount || 0).toLocaleString())}</strong> from <strong>${escapeHtml(tx.property || 'Unknown')}</strong>`
+      : `<strong>${escapeHtml(tx.contact || tx.description)}</strong> — <strong>$${escapeHtml((tx.amount || 0).toLocaleString())}</strong>`;
     return `
       <li class="activity-item">
-        <div class="activity-avatar" style="background:linear-gradient(135deg,${AVATAR_COLORS[colorIdx]},${AVATAR_COLORS[(colorIdx + 1) % AVATAR_COLORS.length]})">${initial}</div>
+        <div class="activity-avatar" style="background:linear-gradient(135deg,${AVATAR_COLORS[colorIdx]},${AVATAR_COLORS[(colorIdx + 1) % AVATAR_COLORS.length]})">${escapeHtml(initial)}</div>
         <div>
           <div class="activity-body">${body}</div>
-          <div class="activity-time">${time}</div>
+          <div class="activity-time">${escapeHtml(time)}</div>
         </div>
       </li>`;
   }).join('');

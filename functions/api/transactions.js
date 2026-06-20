@@ -1,6 +1,10 @@
 // GET /api/transactions — list transactions
 // POST /api/transactions — create a transaction
 
+const JSON_HEADERS = { 'Content-Type': 'application/json' };
+
+const VALID_TYPES = ['Income', 'Expense'];
+
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -26,11 +30,17 @@ export async function onRequest(context) {
       'SELECT COUNT(*) AS total FROM transactions' + (type ? ' WHERE type = ?' : '')
     ).bind(...(type ? [type] : [])).first();
 
-    return new Response(JSON.stringify({ items: items.results, total: countRow?.total || 0 }));
+    return new Response(JSON.stringify({ items: items.results, total: countRow?.total || 0 }), { headers: JSON_HEADERS });
   }
 
   if (method === 'POST') {
     const body = await request.json();
+    if (body.type && !VALID_TYPES.includes(body.type)) {
+      return new Response(JSON.stringify({ error: 'invalid type' }), { status: 400, headers: JSON_HEADERS });
+    }
+    if (body.amount !== undefined && (typeof body.amount !== 'number' || body.amount < 0)) {
+      return new Response(JSON.stringify({ error: 'amount must be a non-negative number' }), { status: 400, headers: JSON_HEADERS });
+    }
     const result = await db.prepare(
       'INSERT INTO transactions (property, type, amount, description, date, contact) VALUES (?, ?, ?, ?, ?, ?)'
     ).bind(
@@ -43,8 +53,8 @@ export async function onRequest(context) {
     ).run();
 
     const newTx = await db.prepare('SELECT * FROM transactions WHERE id = ?').bind(result.meta.last_row_id).first();
-    return new Response(JSON.stringify(newTx), { status: 201 });
+    return new Response(JSON.stringify(newTx), { status: 201, headers: JSON_HEADERS });
   }
 
-  return new Response(JSON.stringify({ error: 'method not allowed' }), { status: 405 });
+  return new Response(JSON.stringify({ error: 'method not allowed' }), { status: 405, headers: JSON_HEADERS });
 }

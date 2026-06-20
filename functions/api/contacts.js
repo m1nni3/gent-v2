@@ -1,6 +1,10 @@
 // GET /api/contacts — list contacts
 // POST /api/contacts — create a contact
 
+const JSON_HEADERS = { 'Content-Type': 'application/json' };
+
+const VALID_ROLES = ['Tenant', 'Owner', 'Contractor', 'Agent'];
+
 export async function onRequest(context) {
   const { request, env } = context;
   const url = new URL(request.url);
@@ -26,23 +30,32 @@ export async function onRequest(context) {
       'SELECT COUNT(*) AS total FROM contacts' + (role ? ' WHERE role = ?' : '')
     ).bind(...(role ? [role] : [])).first();
 
-    return new Response(JSON.stringify({ items: items.results, total: countRow?.total || 0 }));
+    return new Response(JSON.stringify({ items: items.results, total: countRow?.total || 0 }), { headers: JSON_HEADERS });
   }
 
   if (method === 'POST') {
     const body = await request.json();
+    if (!body.name || typeof body.name !== 'string' || body.name.trim().length === 0) {
+      return new Response(JSON.stringify({ error: 'name is required' }), { status: 400, headers: JSON_HEADERS });
+    }
+    if (body.email && (typeof body.email !== 'string' || !body.email.includes('@'))) {
+      return new Response(JSON.stringify({ error: 'invalid email' }), { status: 400, headers: JSON_HEADERS });
+    }
+    if (body.role && !VALID_ROLES.includes(body.role)) {
+      return new Response(JSON.stringify({ error: 'invalid role' }), { status: 400, headers: JSON_HEADERS });
+    }
     const result = await db.prepare(
       'INSERT INTO contacts (name, email, role, property) VALUES (?, ?, ?, ?)'
     ).bind(
-      body.name || '',
+      body.name.trim(),
       body.email || '',
       body.role || 'Tenant',
       body.property || ''
     ).run();
 
     const newContact = await db.prepare('SELECT * FROM contacts WHERE id = ?').bind(result.meta.last_row_id).first();
-    return new Response(JSON.stringify(newContact), { status: 201 });
+    return new Response(JSON.stringify(newContact), { status: 201, headers: JSON_HEADERS });
   }
 
-  return new Response(JSON.stringify({ error: 'method not allowed' }), { status: 405 });
+  return new Response(JSON.stringify({ error: 'method not allowed' }), { status: 405, headers: JSON_HEADERS });
 }

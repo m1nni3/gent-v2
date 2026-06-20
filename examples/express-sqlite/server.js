@@ -26,7 +26,11 @@ import './seed.js';
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || 'http://localhost:9173',
+  methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+  allowedHeaders: ['Content-Type'],
+}));
 app.use(express.json({ limit: '256kb' }));
 
 // Tiny logger so dev sees requests in the terminal.
@@ -158,7 +162,7 @@ app.post('/api/messages', (req, res) => {
 app.get('/api/health', (_req, res) => {
   const orders = db.prepare('SELECT COUNT(*) AS n FROM orders').get().n;
   const messages = db.prepare('SELECT COUNT(*) AS n FROM messages').get().n;
-  res.json({ ok: true, orders, messages, uptime: process.uptime() });
+  res.json({ ok: true, orders, messages });
 });
 
 // 404 — JSON, never HTML.
