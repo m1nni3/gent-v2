@@ -1,30 +1,5 @@
 import { describe, it, expect } from 'vitest';
-
-// The score function is not exported, so we recreate its logic for testing.
-// This tests the fuzzy matching algorithm used in the command palette.
-function score(query, target) {
-  if (!query) { return 0; }
-  const t = target;
-  const q = query;
-  let ti = 0;
-  let qi = 0;
-  let s = 0;
-  let lastMatchedAt = -2;
-  while (qi < q.length && ti < t.length) {
-    if (t[ti] === q[qi]) {
-      if (ti === 0 || t[ti - 1] === ' ' || t[ti - 1] === '-' || t[ti - 1] === '_') { s -= 6; }
-      if (lastMatchedAt === ti - 1) { s -= 4; }
-      lastMatchedAt = ti;
-      qi += 1;
-    } else {
-      s += 1;
-    }
-    ti += 1;
-  }
-  if (qi < q.length) { return Infinity; }
-  s += (t.length - q.length) * 0.1;
-  return s;
-}
+import { _score as score } from './command-palette.js';
 
 describe('command-palette score function', () => {
   it('returns 0 for empty query', () => {

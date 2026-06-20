@@ -244,4 +244,4 @@ export function initCommandPalette() {
   }
 }
 
-export { open as openCommandPalette, close as closeCommandPalette };
+export { open as openCommandPalette, close as closeCommandPalette, score as _score };
