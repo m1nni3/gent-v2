@@ -260,6 +260,7 @@ describe('httpAdapter', () => {
 
     it('HttpError has status property', async () => {
       mockFetch.mockReturnValue(fail(500, 'Server Error'));
+      expect.assertions(3);
       try {
         await adapter.list();
       } catch (e) {
