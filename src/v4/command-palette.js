@@ -17,16 +17,28 @@ let activeIndex = 0;
 
 function buildItems() {
   const out = [];
-  // Pages from NAV
+  // Pages from NAV — flatten parent items with children into their leaves
   NAV.forEach((group) => {
     group.items.forEach((it) => {
-      out.push({
-        kind: 'page',
-        label: it.text,
-        section: group.label,
-        href: it.href,
-        keywords: `${it.text} ${group.label} ${it.key}`.toLowerCase()
-      });
+      if (it.children) {
+        it.children.forEach((child) => {
+          out.push({
+            kind: 'page',
+            label: child.text,
+            section: `${group.label} › ${it.text}`,
+            href: child.href,
+            keywords: `${child.text} ${it.text} ${group.label} ${child.key}`.toLowerCase()
+          });
+        });
+      } else {
+        out.push({
+          kind: 'page',
+          label: it.text,
+          section: group.label,
+          href: it.href,
+          keywords: `${it.text} ${group.label} ${it.key}`.toLowerCase()
+        });
+      }
     });
   });
   // Inline actions
