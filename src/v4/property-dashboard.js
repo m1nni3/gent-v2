@@ -370,9 +370,15 @@ function wireModals(adapters) {
                 region: 'Other',
                 added_date: new Date().toISOString().slice(0, 10)
               };
-              await adapters.properties.create(data);
-              showToast('Property added ✓', { variant: 'success' });
-              refreshDashboard(adapters);
+              try {
+                await adapters.properties.create(data);
+                showToast('Property added ✓', { variant: 'success' });
+                refreshDashboard(adapters);
+              } catch (err) {
+                console.error('[property-dashboard] create failed:', err);
+                showToast('Failed to add property', { variant: 'danger' });
+                return false;
+              }
             }
           }
         ]
@@ -386,8 +392,13 @@ function wireModals(adapters) {
 let _refreshTimer = null;
 
 async function refreshDashboard(adapters) {
-  const data = await loadAll(adapters);
-  renderAll(data);
+  try {
+    const data = await loadAll(adapters);
+    renderAll(data);
+  } catch (err) {
+    console.error('[property-dashboard] refresh failed:', err);
+    showToast('Failed to refresh dashboard data', { variant: 'danger' });
+  }
 }
 
 function renderAll(data) {
@@ -418,7 +429,12 @@ export async function initPropertyDashboard() {
   await waitForCharts();
 
   const adapters = createAdapters();
-  const data = await loadAll(adapters);
-  renderAll(data);
+  try {
+    const data = await loadAll(adapters);
+    renderAll(data);
+  } catch (err) {
+    console.error('[property-dashboard] init failed:', err);
+    showToast('Failed to load dashboard data', { variant: 'danger' });
+  }
   wireModals(adapters);
 }

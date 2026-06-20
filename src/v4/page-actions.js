@@ -61,7 +61,11 @@ async function doShare() {
       await navigator.clipboard.writeText(location.href);
       showToast('Link copied to clipboard', { variant: 'success' });
     }
-  } catch (_e) { /* user cancelled */ }
+  } catch (err) {
+    if (err.name === 'AbortError' || err.name === 'NotAllowedError') {return;}
+    showToast('Unable to share', { variant: 'warning' });
+    console.error('[share] failed:', err);
+  }
 }
 
 function doExport(_btn) {

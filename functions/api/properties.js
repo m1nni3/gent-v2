@@ -14,6 +14,17 @@ export async function onRequest(context) {
   const db = env.gent_v2_db;
   const kv = env.GENT_V2_KV;
 
+  try {
+    return await handleRequest({ request, url, method, id, db, kv });
+  } catch (err) {
+    const status = err.status || 500;
+    const message = status === 500 ? 'internal server error' : err.message;
+    return new Response(JSON.stringify({ error: message }), { status });
+  }
+}
+
+async function handleRequest({ request, url, method, id, db, kv }) {
+
   if (method === 'GET') {
     if (id) {
       const prop = await db.prepare('SELECT * FROM properties WHERE id = ?').bind(id).first();
@@ -48,7 +59,10 @@ export async function onRequest(context) {
   }
 
   if (method === 'POST') {
-    const body = await request.json();
+    let body;
+    try { body = await request.json(); } catch (_e) {
+      return new Response(JSON.stringify({ error: 'invalid JSON body' }), { status: 400 });
+    }
     if (!body.name) return new Response(JSON.stringify({ error: 'name is required' }), { status: 400 });
 
     const result = await db.prepare(
@@ -70,7 +84,10 @@ export async function onRequest(context) {
   }
 
   if (method === 'PATCH' && id) {
-    const body = await request.json();
+    let body;
+    try { body = await request.json(); } catch (_e) {
+      return new Response(JSON.stringify({ error: 'invalid JSON body' }), { status: 400 });
+    }
     const fields = [];
     const binds = [];
     for (const key of ['name', 'address', 'type', 'value', 'status', 'region']) {

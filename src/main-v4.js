@@ -14,7 +14,9 @@ initCharts();
 initTables();
 initCommandPalette();
 initPageActions();
-import('./v4/property-actions.js').then((m) => m.initPropertyActions());
+import('./v4/property-actions.js').then((m) => m.initPropertyActions()).catch((err) => {
+  console.error('[property-actions] failed to load:', err);
+});
 // by the cache). Path uses Vite's BASE_URL so subpath deploys (e.g.
 // preview.colorlib.com/theme/foo/) register the SW at the right scope.
 if ('serviceWorker' in navigator && import.meta.env.PROD) {
@@ -26,19 +28,29 @@ if ('serviceWorker' in navigator && import.meta.env.PROD) {
 
 // Lazy-load page-specific modules only when their host element is on the page.
 if (document.getElementById('inbox-root')) {
-  import('./v4/inbox.js').then((m) => m.initInbox());
+  import('./v4/inbox.js').then((m) => m.initInbox()).catch((err) => {
+    console.error('[inbox] failed to load:', err);
+  });
 }
 if (document.querySelector('.calendar-grid')) {
-  import('./v4/calendar.js').then((m) => m.initCalendar());
+  import('./v4/calendar.js').then((m) => m.initCalendar()).catch((err) => {
+    console.error('[calendar] failed to load:', err);
+  });
 }
 if (document.querySelector('.settings-content')) {
-  import('./v4/settings.js').then((m) => m.initSettings());
+  import('./v4/settings.js').then((m) => m.initSettings()).catch((err) => {
+    console.error('[settings] failed to load:', err);
+  });
 }
 if (document.querySelector('[data-date-range], [data-rich-text], [data-multi-select]')) {
-  import('./v4/form-controls.js').then((m) => m.initFormControls());
+  import('./v4/form-controls.js').then((m) => m.initFormControls()).catch((err) => {
+    console.error('[form-controls] failed to load:', err);
+  });
 }
 if (document.querySelector('[data-page="properties-dashboard"]')) {
-  import('./v4/property-dashboard.js').then((m) => m.initPropertyDashboard());
+  import('./v4/property-dashboard.js').then((m) => m.initPropertyDashboard()).catch((err) => {
+    console.error('[property-dashboard] failed to load:', err);
+  });
 }
 
 // ────────────────────────
@@ -136,7 +148,9 @@ document.addEventListener('submit', (e) => {
   e.preventDefault();
   const submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
   const label = (submitBtn?.textContent || submitBtn?.value || 'Saved').trim();
-  import('./v4/toast.js').then(({ showToast }) => showToast(`${label} ✓`, { variant: 'success' }));
+  import('./v4/toast.js').then(({ showToast }) => showToast(`${label} ✓`, { variant: 'success' })).catch((err) => {
+    console.error('[toast] failed to load:', err);
+  });
   if (form.dataset.resetOnSubmit !== 'false') {form.reset();}
 });
 

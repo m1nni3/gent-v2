@@ -8,6 +8,16 @@ export async function onRequest(context) {
 
   const db = env.gent_v2_db;
 
+  try {
+    return await handleRequest({ request, url, method, db });
+  } catch (err) {
+    const status = err.status || 500;
+    const message = status === 500 ? 'internal server error' : err.message;
+    return new Response(JSON.stringify({ error: message }), { status });
+  }
+}
+
+async function handleRequest({ request, url, method, db }) {
   if (method === 'GET') {
     const { type, limit, offset } = Object.fromEntries(url.searchParams);
     const maxLimit = Math.min(parseInt(limit || '50', 10), 200);
@@ -30,7 +40,10 @@ export async function onRequest(context) {
   }
 
   if (method === 'POST') {
-    const body = await request.json();
+    let body;
+    try { body = await request.json(); } catch (_e) {
+      return new Response(JSON.stringify({ error: 'invalid JSON body' }), { status: 400 });
+    }
     const result = await db.prepare(
       'INSERT INTO transactions (property, type, amount, description, date, contact) VALUES (?, ?, ?, ?, ?, ?)'
     ).bind(
@@ -48,3 +61,4 @@ export async function onRequest(context) {
 
   return new Response(JSON.stringify({ error: 'method not allowed' }), { status: 405 });
 }
+
