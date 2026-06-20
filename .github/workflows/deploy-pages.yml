@@ -53,3 +53,6 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+- name: Devin Action
+  uses: aaronsteers/devin-action@v1.0.0
