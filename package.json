@@ -2,7 +2,7 @@
   "name": "gentelella",
   "version": "4.0.2",
   "type": "module",
-  "description": "Gentelella v4 — free admin template. 60 pages, 20 chart variants, fully interactive inbox & kanban, live theme generator, component playground, PWA-ready. Vite 8, vanilla JS, no Bootstrap, no jQuery.",
+  "description": "Gentelella v4 \u2014 free admin template. 60 pages, 20 chart variants, fully interactive inbox & kanban, live theme generator, component playground, PWA-ready. Vite 8, vanilla JS, no Bootstrap, no jQuery.",
   "scripts": {
     "dev": "vite --clearScreen false",
     "build": "NODE_ENV=production vite build",
@@ -17,7 +17,10 @@
     "screenshots": "node scripts/screenshots.mjs",
     "smoke": "node scripts/smoke.mjs",
     "deploy:preview": "bash scripts/deploy-preview.sh",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "repository": {
     "type": "git",
@@ -67,12 +70,14 @@
     "@playwright/test": "^1.61.0",
     "eslint": "^10.5.0",
     "eslint-config-prettier": "^10.1.8",
+    "jsdom": "^28.1.0",
     "playwright": "^1.61.0",
     "prettier": "^3.8.4",
     "rollup-plugin-visualizer": "^7.0.1",
     "sass": "^1.101.0",
     "terser": "^5.48.0",
-    "vite": "^8.0.16"
+    "vite": "^8.0.16",
+    "vitest": "^4.1.9"
   },
   "dependencies": {
     "datatables.net": "^2.3.8",
