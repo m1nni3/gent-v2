@@ -8,6 +8,7 @@
 
 import { showToast } from './toast.js';
 import { showModal } from './modal.js';
+import { applyTheme } from './utils.js';
 
 const STORAGE_KEY = 'gentelella:settings';
 
@@ -23,7 +24,9 @@ function load() {
 function save(data) {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-  } catch (_e) { /* private mode */ }
+  } catch (_e) {
+    /* private mode */
+  }
 }
 
 // ────────────────────────
@@ -33,29 +36,37 @@ function save(data) {
 function toggleKey(toggle) {
   const row = toggle.closest('.settings-toggle-row');
   const label = row?.querySelector('.label')?.textContent.trim();
-  if (!label) {return null;}
+  if (!label) {
+    return null;
+  }
   const section = toggle.closest('.settings-section')?.id || 'general';
   return `toggle:${section}:${label}`;
 }
 
 function initToggles() {
   const stored = load();
-  document.querySelectorAll('.settings-toggle-list .toggle').forEach((t) => {
+  document.querySelectorAll('.settings-toggle-list .toggle').forEach(t => {
     const k = toggleKey(t);
-    if (!k) {return;}
+    if (!k) {
+      return;
+    }
     if (Object.prototype.hasOwnProperty.call(stored, k)) {
       t.classList.toggle('on', !!stored[k]);
     }
   });
 
   // Click is already handled globally; we listen for the change to persist.
-  document.addEventListener('click', (e) => {
+  document.addEventListener('click', e => {
     const t = e.target.closest('.settings-toggle-list .toggle');
-    if (!t) {return;}
+    if (!t) {
+      return;
+    }
     // Wait one tick so the global handler updates the class first.
     setTimeout(() => {
       const k = toggleKey(t);
-      if (!k) {return;}
+      if (!k) {
+        return;
+      }
       const data = load();
       data[k] = t.classList.contains('on');
       save(data);
@@ -69,31 +80,24 @@ function initToggles() {
 
 function initRadios() {
   const stored = load();
-  document.querySelectorAll('.theme-options input[type="radio"]').forEach((r) => {
+  document.querySelectorAll('.theme-options input[type="radio"]').forEach(r => {
     const k = `radio:${r.name}`;
-    if (stored[k] === r.value) {r.checked = true;}
+    if (stored[k] === r.value) {
+      r.checked = true;
+    }
     r.addEventListener('change', () => {
-      if (!r.checked) {return;}
+      if (!r.checked) {
+        return;
+      }
       const data = load();
       data[k] = r.value;
       save(data);
       // Side-effect: theme radio actually applies the theme.
-      if (r.name === 'theme') {applyThemeChoice(r.value);}
+      if (r.name === 'theme') {
+        applyTheme(r.value);
+      }
     });
   });
-}
-
-function applyThemeChoice(choice) {
-  if (choice === 'system') {
-    try { localStorage.removeItem('theme'); } catch (_e) { /* ignore */ }
-    const dark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  } else {
-    try { localStorage.setItem('theme', choice); } catch (_e) { /* ignore */ }
-    document.documentElement.setAttribute('data-theme', choice);
-  }
-  const btn = document.querySelector('.theme-toggle');
-  if (btn) {btn.setAttribute('aria-pressed', choice === 'dark' ? 'true' : 'false');}
 }
 
 // ────────────────────────
@@ -104,56 +108,80 @@ function initProfileForm() {
   // The settings page wraps profile fields in a <form>. Find the first form
   // inside the settings-content area.
   const profileForm = document.querySelector('.settings-content form');
-  if (!profileForm) {return;}
+  if (!profileForm) {
+    return;
+  }
 
   const inputs = [...profileForm.querySelectorAll('input, textarea, select')];
   const stored = load();
-  inputs.forEach((el) => {
+  inputs.forEach(el => {
     const k = `field:${el.id || el.name}`;
     if (!k.endsWith(':') && Object.prototype.hasOwnProperty.call(stored, k)) {
       el.value = stored[k];
     }
   });
 
-  const initial = inputs.map((el) => el.value);
+  const initial = inputs.map(el => el.value);
   let dirty = false;
 
   const saveBtn = profileForm.querySelector('button[type="submit"]');
   const cancelBtn = profileForm.querySelector('button[type="reset"]');
-  if (saveBtn) {saveBtn.disabled = true;}
-  if (cancelBtn) {cancelBtn.disabled = true;}
+  if (saveBtn) {
+    saveBtn.disabled = true;
+  }
+  if (cancelBtn) {
+    cancelBtn.disabled = true;
+  }
 
   const checkDirty = () => {
-    const current = inputs.map((el) => el.value);
+    const current = inputs.map(el => el.value);
     dirty = current.some((v, i) => v !== initial[i]);
-    if (saveBtn) {saveBtn.disabled = !dirty;}
-    if (cancelBtn) {cancelBtn.disabled = !dirty;}
+    if (saveBtn) {
+      saveBtn.disabled = !dirty;
+    }
+    if (cancelBtn) {
+      cancelBtn.disabled = !dirty;
+    }
   };
 
-  inputs.forEach((el) => el.addEventListener('input', checkDirty));
+  inputs.forEach(el => el.addEventListener('input', checkDirty));
 
-  profileForm.addEventListener('submit', (e) => {
+  profileForm.addEventListener('submit', e => {
     e.preventDefault();
     e.stopPropagation();
-    if (!dirty) {return;}
+    if (!dirty) {
+      return;
+    }
     const data = load();
-    inputs.forEach((el) => {
+    inputs.forEach(el => {
       const k = `field:${el.id || el.name}`;
-      if (!k.endsWith(':')) {data[k] = el.value;}
+      if (!k.endsWith(':')) {
+        data[k] = el.value;
+      }
     });
     save(data);
-    inputs.forEach((el, i) => { initial[i] = el.value; });
+    inputs.forEach((el, i) => {
+      initial[i] = el.value;
+    });
     dirty = false;
-    if (saveBtn) {saveBtn.disabled = true;}
-    if (cancelBtn) {cancelBtn.disabled = true;}
+    if (saveBtn) {
+      saveBtn.disabled = true;
+    }
+    if (cancelBtn) {
+      cancelBtn.disabled = true;
+    }
     showToast('Profile saved', { variant: 'success' });
   });
 
   if (cancelBtn) {
-    cancelBtn.addEventListener('click', (e) => {
+    cancelBtn.addEventListener('click', e => {
       e.preventDefault();
-      if (!dirty) {return;}
-      inputs.forEach((el, i) => { el.value = initial[i]; });
+      if (!dirty) {
+        return;
+      }
+      inputs.forEach((el, i) => {
+        el.value = initial[i];
+      });
       checkDirty();
       showToast('Changes discarded');
     });
@@ -166,14 +194,18 @@ function initProfileForm() {
 
 function initIntegrations() {
   const stored = load();
-  document.querySelectorAll('.integration').forEach((card) => {
+  document.querySelectorAll('.integration').forEach(card => {
     const titleEl = card.querySelector('.title');
     const btn = card.querySelector('.btn');
-    if (!titleEl || !btn) {return;}
+    if (!titleEl || !btn) {
+      return;
+    }
     const key = `integration:${titleEl.textContent.trim()}`;
 
     const isConnected = () => {
-      if (Object.prototype.hasOwnProperty.call(stored, key)) {return stored[key];}
+      if (Object.prototype.hasOwnProperty.call(stored, key)) {
+        return stored[key];
+      }
       // Default state from existing markup label
       return /connected/i.test(btn.textContent);
     };
@@ -186,7 +218,7 @@ function initIntegrations() {
     };
     paint();
 
-    btn.addEventListener('click', (e) => {
+    btn.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
       const data = load();
@@ -194,7 +226,12 @@ function initIntegrations() {
       Object.assign(stored, data);
       save(data);
       paint();
-      showToast(data[key] ? `${titleEl.textContent.trim()} connected` : `${titleEl.textContent.trim()} disconnected`, { variant: data[key] ? 'success' : 'default' });
+      showToast(
+        data[key]
+          ? `${titleEl.textContent.trim()} connected`
+          : `${titleEl.textContent.trim()} disconnected`,
+        { variant: data[key] ? 'success' : 'default' }
+      );
     });
   });
 }
@@ -204,10 +241,12 @@ function initIntegrations() {
 // ────────────────────────
 
 function initSessions() {
-  document.querySelectorAll('.session-row').forEach((row) => {
+  document.querySelectorAll('.session-row').forEach(row => {
     const btn = row.querySelector('.btn');
-    if (!btn || btn.textContent.trim().toLowerCase() !== 'revoke') {return;}
-    btn.addEventListener('click', (e) => {
+    if (!btn || btn.textContent.trim().toLowerCase() !== 'revoke') {
+      return;
+    }
+    btn.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
       const device = row.querySelector('.device')?.textContent.trim() || 'session';
@@ -238,14 +277,17 @@ function initSessions() {
 // ────────────────────────
 
 function initDanger() {
-  document.querySelectorAll('.danger-row .btn').forEach((btn) => {
+  document.querySelectorAll('.danger-row .btn').forEach(btn => {
     const label = btn.textContent.trim().toLowerCase();
     if (label === 'export') {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
         const data = load();
-        const blob = new Blob([JSON.stringify({ exportedAt: new Date().toISOString(), settings: data }, null, 2)], { type: 'application/json' });
+        const blob = new Blob(
+          [JSON.stringify({ exportedAt: new Date().toISOString(), settings: data }, null, 2)],
+          { type: 'application/json' }
+        );
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
@@ -257,7 +299,7 @@ function initDanger() {
         showToast('Workspace export ready', { variant: 'success' });
       });
     } else if (label === 'transfer') {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
         showModal({
@@ -278,7 +320,7 @@ function initDanger() {
             {
               label: 'Transfer',
               variant: 'danger',
-              action: (ctx) => {
+              action: ctx => {
                 const to = ctx.body.querySelector('#transfer-to').value;
                 showToast(`Transfer initiated to ${to}`, { variant: 'success' });
               }
@@ -287,7 +329,7 @@ function initDanger() {
         });
       });
     } else if (label === 'delete') {
-      btn.addEventListener('click', (e) => {
+      btn.addEventListener('click', e => {
         e.preventDefault();
         e.stopPropagation();
         showModal({
@@ -304,7 +346,7 @@ function initDanger() {
             {
               label: 'Delete account',
               variant: 'danger',
-              action: (ctx) => {
+              action: ctx => {
                 const v = ctx.body.querySelector('#confirm-delete').value;
                 if (v !== 'DELETE') {
                   showToast('Type DELETE to confirm', { variant: 'error' });
@@ -325,10 +367,11 @@ function initDanger() {
 // ────────────────────────
 
 function initTeam() {
-  const inviteBtn = [...document.querySelectorAll('#team .btn-primary')]
-    .find((b) => b.textContent.trim().toLowerCase().includes('invite'));
+  const inviteBtn = [...document.querySelectorAll('#team .btn-primary')].find(b =>
+    b.textContent.trim().toLowerCase().includes('invite')
+  );
   if (inviteBtn) {
-    inviteBtn.addEventListener('click', (e) => {
+    inviteBtn.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
       showModal({
@@ -354,7 +397,7 @@ function initTeam() {
           {
             label: 'Send invite',
             variant: 'primary',
-            action: (ctx) => {
+            action: ctx => {
               const email = ctx.body.querySelector('#invite-email').value.trim();
               if (!email) {
                 showToast('Add an email address', { variant: 'error' });
@@ -368,9 +411,11 @@ function initTeam() {
     });
   }
 
-  document.querySelectorAll('#team .session-row .btn').forEach((btn) => {
-    if (btn.textContent.trim().toLowerCase() !== 'manage') {return;}
-    btn.addEventListener('click', (e) => {
+  document.querySelectorAll('#team .session-row .btn').forEach(btn => {
+    if (btn.textContent.trim().toLowerCase() !== 'manage') {
+      return;
+    }
+    btn.addEventListener('click', e => {
       e.preventDefault();
       e.stopPropagation();
       const row = btn.closest('.session-row');
@@ -388,15 +433,23 @@ function initTeam() {
           </div>
         `,
         actions: [
-          { label: 'Remove', variant: 'danger', action: () => {
-            row.remove();
-            showToast(`${name} removed from team`);
-          } },
+          {
+            label: 'Remove',
+            variant: 'danger',
+            action: () => {
+              row.remove();
+              showToast(`${name} removed from team`);
+            }
+          },
           { label: 'Cancel', variant: 'ghost' },
-          { label: 'Save', variant: 'primary', action: (ctx) => {
-            const role = ctx.body.querySelector('#manage-role').value;
-            showToast(`${name} → ${role}`, { variant: 'success' });
-          } }
+          {
+            label: 'Save',
+            variant: 'primary',
+            action: ctx => {
+              const role = ctx.body.querySelector('#manage-role').value;
+              showToast(`${name} → ${role}`, { variant: 'success' });
+            }
+          }
         ]
       });
     });
@@ -407,7 +460,9 @@ function initTeam() {
  * Wire up all settings interactions. Idempotent on a single page load.
  */
 export function initSettings() {
-  if (initSettings._wired) {return;}
+  if (initSettings._wired) {
+    return;
+  }
   initSettings._wired = true;
   initToggles();
   initRadios();

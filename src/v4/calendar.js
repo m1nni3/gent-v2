@@ -9,15 +9,28 @@
 
 import { showToast } from './toast.js';
 import { showModal, closeModal } from './modal.js';
+import { escapeHtml } from './utils.js';
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];
 
 const COLOR_OPTIONS = [
-  { value: '',       label: 'Teal',   var: 'var(--primary)' },
-  { value: 'blue',   label: 'Blue',   var: 'var(--blue)' },
+  { value: '', label: 'Teal', var: 'var(--primary)' },
+  { value: 'blue', label: 'Blue', var: 'var(--blue)' },
   { value: 'yellow', label: 'Yellow', var: 'var(--yellow)' },
-  { value: 'red',    label: 'Red',    var: 'var(--red)' },
+  { value: 'red', label: 'Red', var: 'var(--red)' },
   { value: 'purple', label: 'Purple', var: 'var(--purple)' }
 ];
 
@@ -42,44 +55,53 @@ const SEED = {
 const events = new Map();
 let nextId = 1;
 
-function pad(n) { return String(n).padStart(2, '0'); }
-function isoKey(y, m, d) { return `${y}-${pad(m + 1)}-${pad(d)}`; }
+function pad(n) {
+  return String(n).padStart(2, '0');
+}
+function isoKey(y, m, d) {
+  return `${y}-${pad(m + 1)}-${pad(d)}`;
+}
 function parseKey(key) {
   const [y, m, d] = key.split('-').map(Number);
   return { year: y, month: m - 1, day: d };
 }
 
 function seedOnce() {
-  if (events.size) {return;}
+  if (events.size) {
+    return;
+  }
   Object.entries(SEED).forEach(([key, list]) => {
-    events.set(key, list.map((e) => ({ id: nextId++, title: e.title, color: e.color || '' })));
+    events.set(
+      key,
+      list.map(e => ({ id: nextId++, title: e.title, color: e.color || '' }))
+    );
   });
 }
 
 function proceduralFor(year, month, day) {
   const dow = new Date(year, month, day).getDay();
   const out = [];
-  if (dow === 1) {out.push({ title: 'Standup 9am', color: '', procedural: true });}
-  if (dow === 5 && day <= 7) {out.push({ title: 'Design review', color: 'blue', procedural: true });}
+  if (dow === 1) {
+    out.push({ title: 'Standup 9am', color: '', procedural: true });
+  }
+  if (dow === 5 && day <= 7) {
+    out.push({ title: 'Design review', color: 'blue', procedural: true });
+  }
   return out;
 }
 
 function eventsForDay(year, month, day) {
   const key = isoKey(year, month, day);
   const stored = events.get(key);
-  if (stored && stored.length) {return stored;}
+  if (stored && stored.length) {
+    return stored;
+  }
   // No stored events — suggest procedural ones (still rendered but read-only).
   return proceduralFor(year, month, day);
 }
 
 function colorOf(value) {
-  return COLOR_OPTIONS.find((c) => c.value === value)?.var ?? 'var(--primary)';
-}
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-  ));
+  return COLOR_OPTIONS.find(c => c.value === value)?.var ?? 'var(--primary)';
 }
 
 // ────────────────────────
@@ -99,22 +121,30 @@ function render(state) {
   const daysInPrev = new Date(year, month, 0).getDate();
 
   const html = [];
-  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach((d) => {
+  ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].forEach(d => {
     html.push(`<div class="dow">${d}</div>`);
   });
 
   for (let i = dowMonFirst; i > 0; i--) {
-    html.push(`<div class="calendar-day muted"><span class="day-num">${daysInPrev - i + 1}</span></div>`);
+    html.push(
+      `<div class="calendar-day muted"><span class="day-num">${daysInPrev - i + 1}</span></div>`
+    );
   }
 
   for (let d = 1; d <= daysInMonth; d++) {
     const key = isoKey(year, month, d);
     const isToday = key === todayKey;
     const dayEvents = eventsForDay(year, month, d);
-    const evMarkup = dayEvents.map((e, idx) => `
+    const evMarkup = dayEvents
+      .map(
+        (e, idx) => `
       <span class="calendar-event${e.color ? ' ' + e.color : ''}" data-event-idx="${idx}" data-day="${d}">${escapeHtml(e.title)}</span>
-    `).join('');
-    html.push(`<div class="calendar-day${isToday ? ' today' : ''}" data-day="${d}"><span class="day-num">${d}</span>${evMarkup}</div>`);
+    `
+      )
+      .join('');
+    html.push(
+      `<div class="calendar-day${isToday ? ' today' : ''}" data-day="${d}"><span class="day-num">${d}</span>${evMarkup}</div>`
+    );
   }
 
   const trailing = 42 - dowMonFirst - daysInMonth;
@@ -132,10 +162,12 @@ function render(state) {
 function colorRadios(name, selected) {
   return `
     <div class="color-swatches" role="radiogroup" aria-label="Event color">
-      ${COLOR_OPTIONS.map((c, i) => `
+      ${COLOR_OPTIONS.map(
+        (c, i) => `
         <input type="radio" id="${name}-${i}" name="${name}" value="${c.value}" ${c.value === (selected || '') ? 'checked' : ''}>
         <label for="${name}-${i}" style="background:${c.var}" title="${c.label}" aria-label="${c.label}"></label>
-      `).join('')}
+      `
+      ).join('')}
     </div>
   `;
 }
@@ -161,19 +193,23 @@ function eventFormHtml({ title = '', color = '', dateValue }) {
 
 function getFormValues(bodyEl) {
   const form = bodyEl.querySelector('form');
-  if (!form) {return null;}
+  if (!form) {
+    return null;
+  }
   const fd = new FormData(form);
   return {
     title: (fd.get('title') || '').toString().trim(),
     color: (fd.get('color') || '').toString(),
-    date:  (fd.get('date')  || '').toString()
+    date: (fd.get('date') || '').toString()
   };
 }
 
 function openEventEditor(state, key, idx) {
   const list = events.get(key) || [];
   const ev = list[idx];
-  if (!ev) {return;}
+  if (!ev) {
+    return;
+  }
   const { year, month, day } = parseKey(key);
   const dateValue = isoKey(year, month, day);
 
@@ -187,8 +223,11 @@ function openEventEditor(state, key, idx) {
         action: ({ close }) => {
           const arr = events.get(key) || [];
           arr.splice(idx, 1);
-          if (!arr.length) {events.delete(key);}
-          else {events.set(key, arr);}
+          if (!arr.length) {
+            events.delete(key);
+          } else {
+            events.set(key, arr);
+          }
           render(state);
           showToast(`Deleted: ${ev.title}`);
           close();
@@ -202,11 +241,18 @@ function openEventEditor(state, key, idx) {
         variant: 'primary',
         action: ({ body }) => {
           const v = getFormValues(body);
-          if (!v || !v.title) { showToast('Title is required', { variant: 'warning' }); return false; }
+          if (!v || !v.title) {
+            showToast('Title is required', { variant: 'warning' });
+            return false;
+          }
           // Remove from old key
           const oldArr = events.get(key) || [];
           oldArr.splice(idx, 1);
-          if (!oldArr.length) {events.delete(key);} else {events.set(key, oldArr);}
+          if (!oldArr.length) {
+            events.delete(key);
+          } else {
+            events.set(key, oldArr);
+          }
           // Insert into new key
           const newArr = events.get(v.date) || [];
           newArr.push({ id: ev.id, title: v.title, color: v.color });
@@ -214,7 +260,8 @@ function openEventEditor(state, key, idx) {
           // If date moved outside the visible month, jump there.
           const np = parseKey(v.date);
           if (np.year !== state.year || np.month !== state.month) {
-            state.year = np.year; state.month = np.month;
+            state.year = np.year;
+            state.month = np.month;
           }
           render(state);
           showToast(`Saved: ${v.title}`, { variant: 'success' });
@@ -226,14 +273,16 @@ function openEventEditor(state, key, idx) {
 }
 
 function openCreateForm(state, presetDate) {
-  const dateValue = presetDate || (() => {
-    // Default: today if today is in the visible month, else the 1st of the visible month.
-    const t = new Date();
-    if (t.getFullYear() === state.year && t.getMonth() === state.month) {
-      return isoKey(t.getFullYear(), t.getMonth(), t.getDate());
-    }
-    return isoKey(state.year, state.month, 1);
-  })();
+  const dateValue =
+    presetDate ||
+    (() => {
+      // Default: today if today is in the visible month, else the 1st of the visible month.
+      const t = new Date();
+      if (t.getFullYear() === state.year && t.getMonth() === state.month) {
+        return isoKey(t.getFullYear(), t.getMonth(), t.getDate());
+      }
+      return isoKey(state.year, state.month, 1);
+    })();
 
   showModal({
     title: 'New event',
@@ -245,13 +294,17 @@ function openCreateForm(state, presetDate) {
         variant: 'primary',
         action: ({ body }) => {
           const v = getFormValues(body);
-          if (!v || !v.title) { showToast('Title is required', { variant: 'warning' }); return false; }
+          if (!v || !v.title) {
+            showToast('Title is required', { variant: 'warning' });
+            return false;
+          }
           const arr = events.get(v.date) || [];
           arr.push({ id: nextId++, title: v.title, color: v.color });
           events.set(v.date, arr);
           const np = parseKey(v.date);
           if (np.year !== state.year || np.month !== state.month) {
-            state.year = np.year; state.month = np.month;
+            state.year = np.year;
+            state.month = np.month;
           }
           render(state);
           showToast(`Created: ${v.title}`, { variant: 'success' });
@@ -275,7 +328,9 @@ function openDayModal(state, year, month, day) {
     if (list.length) {
       return `
         <div class="modal-events-list">
-          ${list.map((e, idx) => `
+          ${list
+            .map(
+              (e, idx) => `
             <div class="modal-event-row">
               <span class="swatch" style="background:${colorOf(e.color)}"></span>
               <span class="title">${escapeHtml(e.title)}</span>
@@ -288,19 +343,25 @@ function openDayModal(state, year, month, day) {
                 </button>
               </span>
             </div>
-          `).join('')}
+          `
+            )
+            .join('')}
         </div>
       `;
     }
     // Procedural-only suggestion (read-only)
     return `
       <div class="modal-events-list">
-        ${procList.map((e) => `
+        ${procList
+          .map(
+            e => `
           <div class="modal-event-row" style="opacity:.75">
             <span class="swatch" style="background:${colorOf(e.color)}"></span>
             <span class="title">${escapeHtml(e.title)} <small style="color:var(--text-muted);font-weight:normal">· suggested</small></span>
           </div>
-        `).join('')}
+        `
+          )
+          .join('')}
       </div>
     `;
   };
@@ -322,7 +383,7 @@ function openDayModal(state, year, month, day) {
   });
 
   // Delegate edit/delete inside the modal body.
-  body.addEventListener('click', (e) => {
+  body.addEventListener('click', e => {
     const editBtn = e.target.closest('[data-edit]');
     const delBtn = e.target.closest('[data-delete]');
     if (editBtn) {
@@ -335,11 +396,17 @@ function openDayModal(state, year, month, day) {
       const list = events.get(key) || [];
       const ev = list[idx];
       list.splice(idx, 1);
-      if (!list.length) {events.delete(key);} else {events.set(key, list);}
+      if (!list.length) {
+        events.delete(key);
+      } else {
+        events.set(key, list);
+      }
       render(state);
       // Re-render the modal body in place
       body.innerHTML = renderListHtml();
-      if (ev) {showToast(`Deleted: ${ev.title}`);}
+      if (ev) {
+        showToast(`Deleted: ${ev.title}`);
+      }
     }
   });
 
@@ -353,7 +420,9 @@ function openDayModal(state, year, month, day) {
 export function initCalendar() {
   const gridEl = document.querySelector('.calendar-grid');
   const monthEl = document.querySelector('.calendar-month');
-  if (!gridEl || !monthEl) {return;}
+  if (!gridEl || !monthEl) {
+    return;
+  }
 
   seedOnce();
 
@@ -372,42 +441,54 @@ export function initCalendar() {
 
   // Prev / next month — calendar-toolbar nav buttons
   const navBtns = document.querySelectorAll('.calendar-toolbar .nav-btns .card-opt-btn');
-  if (navBtns[0]) {navBtns[0].addEventListener('click', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    state.month -= 1;
-    if (state.month < 0) { state.month = 11; state.year -= 1; }
-    render(state);
-  });}
-  if (navBtns[1]) {navBtns[1].addEventListener('click', (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    state.month += 1;
-    if (state.month > 11) { state.month = 0; state.year += 1; }
-    render(state);
-  });}
+  if (navBtns[0]) {
+    navBtns[0].addEventListener('click', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      state.month -= 1;
+      if (state.month < 0) {
+        state.month = 11;
+        state.year -= 1;
+      }
+      render(state);
+    });
+  }
+  if (navBtns[1]) {
+    navBtns[1].addEventListener('click', e => {
+      e.stopPropagation();
+      e.preventDefault();
+      state.month += 1;
+      if (state.month > 11) {
+        state.month = 0;
+        state.year += 1;
+      }
+      render(state);
+    });
+  }
 
   // Page-action buttons
-  document.querySelectorAll('.page-actions .btn').forEach((b) => {
+  document.querySelectorAll('.page-actions .btn').forEach(b => {
     const label = b.textContent.trim().toLowerCase();
     if (label === 'today') {
-      b.addEventListener('click', (e) => {
-        e.stopPropagation(); e.preventDefault();
+      b.addEventListener('click', e => {
+        e.stopPropagation();
+        e.preventDefault();
         const now = new Date();
         state.year = now.getFullYear();
         state.month = now.getMonth();
         render(state);
       });
     } else if (label.includes('new event')) {
-      b.addEventListener('click', (e) => {
-        e.stopPropagation(); e.preventDefault();
+      b.addEventListener('click', e => {
+        e.stopPropagation();
+        e.preventDefault();
         openCreateForm(state);
       });
     }
   });
 
   // Click in the grid → event editor or day modal
-  gridEl.addEventListener('click', (e) => {
+  gridEl.addEventListener('click', e => {
     const eventEl = e.target.closest('[data-event-idx]');
     if (eventEl) {
       e.stopPropagation();

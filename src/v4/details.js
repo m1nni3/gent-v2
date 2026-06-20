@@ -4,59 +4,45 @@
 
 import { showModal } from './modal.js';
 import { showToast } from './toast.js';
+import { escapeHtml, COLOR_VAR } from './utils.js';
 
 const MEMBER_NAMES = {
-  SK: { name: 'Sarah Kowalski', role: 'Designer',  color: 'azure' },
-  MR: { name: 'Michael Reyes',  role: 'Engineer',  color: 'purple' },
-  EW: { name: 'Emily Wang',     role: 'PM',        color: 'yellow' },
-  MK: { name: 'Mark Kim',       role: 'Engineer',  color: 'red' },
-  LP: { name: 'Lina Park',      role: 'Marketing', color: 'green' },
-  DR: { name: 'Diego Reyes',    role: 'Sales',     color: 'blue' },
-  YT: { name: 'Yuki Tanaka',    role: 'Support',   color: 'primary' },
-  TH: { name: 'Tom Hardy',      role: 'Engineer',  color: 'purple' },
-  A:  { name: 'Aigars Silkalns', role: 'Admin',    color: 'primary' }
-};
-
-const COLOR_VAR = {
-  primary: 'var(--primary)',
-  azure:   'var(--azure)',
-  purple:  'var(--purple)',
-  yellow:  'var(--yellow)',
-  red:     'var(--red)',
-  green:   'var(--green)',
-  blue:    'var(--blue)'
+  SK: { name: 'Sarah Kowalski', role: 'Designer', color: 'azure' },
+  MR: { name: 'Michael Reyes', role: 'Engineer', color: 'purple' },
+  EW: { name: 'Emily Wang', role: 'PM', color: 'yellow' },
+  MK: { name: 'Mark Kim', role: 'Engineer', color: 'red' },
+  LP: { name: 'Lina Park', role: 'Marketing', color: 'green' },
+  DR: { name: 'Diego Reyes', role: 'Sales', color: 'blue' },
+  YT: { name: 'Yuki Tanaka', role: 'Support', color: 'primary' },
+  TH: { name: 'Tom Hardy', role: 'Engineer', color: 'purple' },
+  A: { name: 'Aigars Silkalns', role: 'Admin', color: 'primary' }
 };
 
 const STATUS_CLS = { green: 'status-green', yellow: 'status-yellow', red: 'status-red' };
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => (
-    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]
-  ));
-}
 
 function emailFor(name) {
   return name.toLowerCase().replace(/\s+/g, '.') + '@example.com';
 }
 
 const SAMPLE_TASKS = [
-  { title: 'Wireframes review',         done: true },
-  { title: 'Stakeholder kickoff',       done: true },
-  { title: 'Design system tokens',      done: true },
-  { title: 'Component library',         done: false },
-  { title: 'QA + accessibility audit',  done: false }
+  { title: 'Wireframes review', done: true },
+  { title: 'Stakeholder kickoff', done: true },
+  { title: 'Design system tokens', done: true },
+  { title: 'Component library', done: false },
+  { title: 'QA + accessibility audit', done: false }
 ];
 
 const SAMPLE_ACTIVITY = [
-  { who: 'Sarah K.',    what: 'commented on the design review', time: '12 min ago' },
-  { who: 'Michael R.',  what: 'merged PR #248',                  time: '1 hour ago' },
-  { who: 'Emily W.',    what: 'updated the timeline',            time: '4 hours ago' }
+  { who: 'Sarah K.', what: 'commented on the design review', time: '12 min ago' },
+  { who: 'Michael R.', what: 'merged PR #248', time: '1 hour ago' },
+  { who: 'Emily W.', what: 'updated the timeline', time: '4 hours ago' }
 ];
 
 export function openProjectModal({ title, client, status, sCls, desc, pct, due, members }) {
-  const memberRows = members.map((m) => {
-    const info = MEMBER_NAMES[m] || { name: m, role: 'Team member', color: 'primary' };
-    return `
+  const memberRows = members
+    .map(m => {
+      const info = MEMBER_NAMES[m] || { name: m, role: 'Team member', color: 'primary' };
+      return `
       <div class="detail-member">
         <span class="av" style="background:${COLOR_VAR[info.color] || 'var(--primary)'}">${m}</span>
         <span class="meta">
@@ -65,23 +51,29 @@ export function openProjectModal({ title, client, status, sCls, desc, pct, due, 
         </span>
       </div>
     `;
-  }).join('');
+    })
+    .join('');
 
-  const tasksHtml = SAMPLE_TASKS.map((t) => `
+  const tasksHtml = SAMPLE_TASKS.map(
+    t => `
     <div class="detail-task${t.done ? ' done' : ''}">
       <span class="checkbox" aria-hidden="true">${t.done ? '<svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2.5 6l2.5 3 5-6"/></svg>' : ''}</span>
       <span class="task-title">${escapeHtml(t.title)}</span>
     </div>
-  `).join('');
+  `
+  ).join('');
 
-  const activityHtml = SAMPLE_ACTIVITY.map((a) => `
+  const activityHtml = SAMPLE_ACTIVITY.map(
+    a => `
     <div class="detail-activity-item">
       <div class="dot"></div>
       <div><strong>${escapeHtml(a.who)}</strong> ${escapeHtml(a.what)} <span class="time">· ${escapeHtml(a.time)}</span></div>
     </div>
-  `).join('');
+  `
+  ).join('');
 
-  const progressColor = sCls === 'red' ? 'var(--red)' : sCls === 'yellow' ? 'var(--yellow)' : 'var(--primary)';
+  const progressColor =
+    sCls === 'red' ? 'var(--red)' : sCls === 'yellow' ? 'var(--yellow)' : 'var(--primary)';
 
   const body = `
     <div class="detail-project">
@@ -115,7 +107,7 @@ export function openProjectModal({ title, client, status, sCls, desc, pct, due, 
       </div>
 
       <div class="detail-section">
-        <div class="detail-section-title">Tasks · ${SAMPLE_TASKS.filter((t) => t.done).length}/${SAMPLE_TASKS.length}</div>
+        <div class="detail-section-title">Tasks · ${SAMPLE_TASKS.filter(t => t.done).length}/${SAMPLE_TASKS.length}</div>
         <div class="detail-tasks">${tasksHtml}</div>
       </div>
 
@@ -139,7 +131,11 @@ export function openProjectModal({ title, client, status, sCls, desc, pct, due, 
 
 export function openContactModal({ name, ini, color, role, projects, tasks, msgs }) {
   const email = emailFor(name);
-  const phone = '+1 (555) ' + (300 + (ini.charCodeAt(0) % 600)).toString().padStart(3, '0') + '-' + (1000 + (ini.charCodeAt(ini.length - 1) % 9000)).toString();
+  const phone =
+    '+1 (555) ' +
+    (300 + (ini.charCodeAt(0) % 600)).toString().padStart(3, '0') +
+    '-' +
+    (1000 + (ini.charCodeAt(ini.length - 1) % 9000)).toString();
   const colorVar = COLOR_VAR[color] || 'var(--primary)';
 
   const body = `
@@ -171,9 +167,15 @@ export function openContactModal({ name, ini, color, role, projects, tasks, msgs
     title: name,
     body,
     actions: [
-      { label: 'Close',   variant: 'outline' },
+      { label: 'Close', variant: 'outline' },
       { label: 'Message', variant: 'outline', action: () => showToast(`Compose to: ${name}`) },
-      { label: 'View profile', variant: 'primary', action: () => { window.location.href = 'profile.html'; } }
+      {
+        label: 'View profile',
+        variant: 'primary',
+        action: () => {
+          window.location.href = 'profile.html';
+        }
+      }
     ]
   });
 }

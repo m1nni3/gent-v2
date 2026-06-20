@@ -2,6 +2,8 @@
 // Auto-init on DOM ready: any element with the relevant data attribute gets
 // upgraded. No external dependencies.
 
+import { escapeHtml, escapeAttr } from './utils.js';
+
 // ────────────────────────
 //  DATE-RANGE PICKER
 // ────────────────────────
@@ -11,12 +13,26 @@
 //   </div>
 // Public events: emits 'change' on the wrapper with detail { from, to }.
 
-const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'];
+const MONTHS = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December'
+];
 const DOW = ['M', 'T', 'W', 'T', 'F', 'S', 'S'];
 
 function fmt(d) {
-  if (!d) {return '';}
+  if (!d) {
+    return '';
+  }
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 }
 
@@ -30,43 +46,67 @@ function buildMonth(year, month, fromTs, toTs, hoverTs) {
   const startWeekday = (first.getDay() + 6) % 7;
   const daysInMonth = new Date(year, month + 1, 0).getDate();
   const cells = [];
-  for (let i = 0; i < startWeekday; i += 1) {cells.push(null);}
-  for (let d = 1; d <= daysInMonth; d += 1) {cells.push(new Date(year, month, d));}
-  while (cells.length % 7 !== 0) {cells.push(null);}
+  for (let i = 0; i < startWeekday; i += 1) {
+    cells.push(null);
+  }
+  for (let d = 1; d <= daysInMonth; d += 1) {
+    cells.push(new Date(year, month, d));
+  }
+  while (cells.length % 7 !== 0) {
+    cells.push(null);
+  }
 
-  const html = cells.map((cell) => {
-    if (!cell) {return '<div class="dr-cell empty"></div>';}
-    const ts = isoDay(cell);
-    const cls = ['dr-cell'];
-    if (fromTs && ts === fromTs) {cls.push('selected', 'range-start');}
-    if (toTs && ts === toTs) {cls.push('selected', 'range-end');}
-    if (fromTs && toTs && ts > fromTs && ts < toTs) {cls.push('in-range');}
-    if (fromTs && !toTs && hoverTs && ts > fromTs && ts <= hoverTs) {cls.push('in-range', 'preview');}
-    if (ts === isoDay(new Date())) {cls.push('today');}
-    return `<button type="button" class="${cls.join(' ')}" data-ts="${ts}">${cell.getDate()}</button>`;
-  }).join('');
+  const html = cells
+    .map(cell => {
+      if (!cell) {
+        return '<div class="dr-cell empty"></div>';
+      }
+      const ts = isoDay(cell);
+      const cls = ['dr-cell'];
+      if (fromTs && ts === fromTs) {
+        cls.push('selected', 'range-start');
+      }
+      if (toTs && ts === toTs) {
+        cls.push('selected', 'range-end');
+      }
+      if (fromTs && toTs && ts > fromTs && ts < toTs) {
+        cls.push('in-range');
+      }
+      if (fromTs && !toTs && hoverTs && ts > fromTs && ts <= hoverTs) {
+        cls.push('in-range', 'preview');
+      }
+      if (ts === isoDay(new Date())) {
+        cls.push('today');
+      }
+      return `<button type="button" class="${cls.join(' ')}" data-ts="${ts}">${cell.getDate()}</button>`;
+    })
+    .join('');
 
   return `
     <div class="dr-month">
       <div class="dr-month-head">${MONTHS[month]} ${year}</div>
-      <div class="dr-dow">${DOW.map((d) => `<span>${d}</span>`).join('')}</div>
+      <div class="dr-dow">${DOW.map(d => `<span>${d}</span>`).join('')}</div>
       <div class="dr-grid">${html}</div>
     </div>
   `;
 }
 
 function initDateRange(wrap) {
-  if (wrap.dataset.drInit) {return;}
+  if (wrap.dataset.drInit) {
+    return;
+  }
   wrap.dataset.drInit = '1';
   const input = wrap.querySelector('input');
-  if (!input) {return;}
+  if (!input) {
+    return;
+  }
   input.readOnly = true;
 
   const state = {
-    from: null,   // Date
-    to: null,     // Date
-    hover: null,  // Date (during pick)
-    pivot: new Date()  // shown month
+    from: null, // Date
+    to: null, // Date
+    hover: null, // Date (during pick)
+    pivot: new Date() // shown month
   };
 
   const popover = document.createElement('div');
@@ -75,12 +115,56 @@ function initDateRange(wrap) {
   document.body.appendChild(popover);
 
   const presets = [
-    { label: 'Today',         get: () => { const d = new Date(); return [d, d]; } },
-    { label: 'Last 7 days',   get: () => { const a = new Date(); const b = new Date(); a.setDate(a.getDate() - 6); return [a, b]; } },
-    { label: 'Last 30 days',  get: () => { const a = new Date(); const b = new Date(); a.setDate(a.getDate() - 29); return [a, b]; } },
-    { label: 'This month',    get: () => { const b = new Date(); const a = new Date(b.getFullYear(), b.getMonth(), 1); return [a, b]; } },
-    { label: 'Last month',    get: () => { const t = new Date(); const a = new Date(t.getFullYear(), t.getMonth() - 1, 1); const b = new Date(t.getFullYear(), t.getMonth(), 0); return [a, b]; } },
-    { label: 'This year',     get: () => { const b = new Date(); const a = new Date(b.getFullYear(), 0, 1); return [a, b]; } }
+    {
+      label: 'Today',
+      get: () => {
+        const d = new Date();
+        return [d, d];
+      }
+    },
+    {
+      label: 'Last 7 days',
+      get: () => {
+        const a = new Date();
+        const b = new Date();
+        a.setDate(a.getDate() - 6);
+        return [a, b];
+      }
+    },
+    {
+      label: 'Last 30 days',
+      get: () => {
+        const a = new Date();
+        const b = new Date();
+        a.setDate(a.getDate() - 29);
+        return [a, b];
+      }
+    },
+    {
+      label: 'This month',
+      get: () => {
+        const b = new Date();
+        const a = new Date(b.getFullYear(), b.getMonth(), 1);
+        return [a, b];
+      }
+    },
+    {
+      label: 'Last month',
+      get: () => {
+        const t = new Date();
+        const a = new Date(t.getFullYear(), t.getMonth() - 1, 1);
+        const b = new Date(t.getFullYear(), t.getMonth(), 0);
+        return [a, b];
+      }
+    },
+    {
+      label: 'This year',
+      get: () => {
+        const b = new Date();
+        const a = new Date(b.getFullYear(), 0, 1);
+        return [a, b];
+      }
+    }
   ];
 
   const render = () => {
@@ -91,7 +175,7 @@ function initDateRange(wrap) {
     const hoverTs = state.hover ? isoDay(state.hover) : null;
     popover.innerHTML = `
       <div class="dr-presets">
-        ${presets.map((p) => `<button type="button" class="dr-preset" data-preset="${p.label}">${p.label}</button>`).join('')}
+        ${presets.map(p => `<button type="button" class="dr-preset" data-preset="${p.label}">${p.label}</button>`).join('')}
       </div>
       <div class="dr-cal">
         <div class="dr-nav">
@@ -127,54 +211,92 @@ function initDateRange(wrap) {
     requestAnimationFrame(position);
     wrap.classList.add('open');
   };
-  const close = () => { popover.hidden = true; wrap.classList.remove('open'); };
+  const close = () => {
+    popover.hidden = true;
+    wrap.classList.remove('open');
+  };
 
   input.addEventListener('focus', open);
   input.addEventListener('click', open);
 
-  popover.addEventListener('click', (e) => {
+  popover.addEventListener('click', e => {
     const cell = e.target.closest('.dr-cell:not(.empty)');
     if (cell) {
       const ts = parseInt(cell.dataset.ts, 10);
       const d = new Date(ts);
       if (!state.from || (state.from && state.to)) {
-        state.from = d; state.to = null; state.hover = null;
+        state.from = d;
+        state.to = null;
+        state.hover = null;
       } else if (ts < isoDay(state.from)) {
-        state.to = state.from; state.from = d;
+        state.to = state.from;
+        state.from = d;
       } else {
         state.to = d;
       }
       render();
       return;
     }
-    if (e.target.closest('.dr-prev')) { state.pivot = new Date(state.pivot.getFullYear(), state.pivot.getMonth() - 1, 1); render(); }
-    else if (e.target.closest('.dr-next')) { state.pivot = new Date(state.pivot.getFullYear(), state.pivot.getMonth() + 1, 1); render(); }
-    else if (e.target.closest('[data-preset]')) {
-      const p = presets.find((x) => x.label === e.target.closest('[data-preset]').dataset.preset);
-      if (p) { const [a, b] = p.get(); state.from = a; state.to = b; state.pivot = new Date(a.getFullYear(), a.getMonth(), 1); render(); }
-    }
-    else if (e.target.closest('[data-action="clear"]')) { state.from = state.to = null; render(); }
-    else if (e.target.closest('[data-action="apply"]')) {
+    if (e.target.closest('.dr-prev')) {
+      state.pivot = new Date(state.pivot.getFullYear(), state.pivot.getMonth() - 1, 1);
+      render();
+    } else if (e.target.closest('.dr-next')) {
+      state.pivot = new Date(state.pivot.getFullYear(), state.pivot.getMonth() + 1, 1);
+      render();
+    } else if (e.target.closest('[data-preset]')) {
+      const p = presets.find(x => x.label === e.target.closest('[data-preset]').dataset.preset);
+      if (p) {
+        const [a, b] = p.get();
+        state.from = a;
+        state.to = b;
+        state.pivot = new Date(a.getFullYear(), a.getMonth(), 1);
+        render();
+      }
+    } else if (e.target.closest('[data-action="clear"]')) {
+      state.from = state.to = null;
+      render();
+    } else if (e.target.closest('[data-action="apply"]')) {
       input.value = state.from ? `${fmt(state.from)} → ${fmt(state.to || state.from)}` : '';
-      wrap.dispatchEvent(new CustomEvent('change', { detail: { from: state.from, to: state.to || state.from } }));
+      wrap.dispatchEvent(
+        new CustomEvent('change', { detail: { from: state.from, to: state.to || state.from } })
+      );
       close();
     }
   });
 
-  popover.addEventListener('mouseover', (e) => {
+  popover.addEventListener('mouseover', e => {
     if (state.from && !state.to) {
       const cell = e.target.closest('.dr-cell:not(.empty)');
-      if (cell) { state.hover = new Date(parseInt(cell.dataset.ts, 10)); render(); }
+      if (cell) {
+        state.hover = new Date(parseInt(cell.dataset.ts, 10));
+        render();
+      }
     }
   });
 
-  document.addEventListener('click', (e) => {
-    if (popover.hidden) {return;}
-    if (popover.contains(e.target) || wrap.contains(e.target)) {return;}
-    close();
-  }, true);
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && !popover.hidden) {close();} });
-  window.addEventListener('resize', () => { if (!popover.hidden) {position();} });
+  document.addEventListener(
+    'click',
+    e => {
+      if (popover.hidden) {
+        return;
+      }
+      if (popover.contains(e.target) || wrap.contains(e.target)) {
+        return;
+      }
+      close();
+    },
+    true
+  );
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && !popover.hidden) {
+      close();
+    }
+  });
+  window.addEventListener('resize', () => {
+    if (!popover.hidden) {
+      position();
+    }
+  });
 }
 
 // ────────────────────────
@@ -187,7 +309,9 @@ function initDateRange(wrap) {
 // The hidden textarea is kept in sync with the editor's HTML so the parent
 // form picks it up on submit.
 function initRichText(wrap) {
-  if (wrap.dataset.rtInit) {return;}
+  if (wrap.dataset.rtInit) {
+    return;
+  }
   wrap.dataset.rtInit = '1';
 
   const textarea = wrap.querySelector('textarea');
@@ -218,13 +342,17 @@ function initRichText(wrap) {
     <div class="rt-editor" contenteditable="true" role="textbox" aria-multiline="true">${initial}</div>
   `;
 
-  if (textarea) {wrap.appendChild(textarea);}
+  if (textarea) {
+    wrap.appendChild(textarea);
+  }
 
   const editor = wrap.querySelector('.rt-editor');
   const toolbar = wrap.querySelector('.rt-toolbar');
 
   const sync = () => {
-    if (textarea) {textarea.value = editor.innerHTML;}
+    if (textarea) {
+      textarea.value = editor.innerHTML;
+    }
     wrap.dispatchEvent(new CustomEvent('input', { detail: editor.innerHTML }));
   };
 
@@ -232,7 +360,9 @@ function initRichText(wrap) {
     if (cmd === 'link') {
       // eslint-disable-next-line no-alert -- minimal link picker; replace with a modal in your app if needed.
       const url = prompt('Link URL:', 'https://');
-      if (url) {document.execCommand('createLink', false, url);}
+      if (url) {
+        document.execCommand('createLink', false, url);
+      }
     } else {
       // execCommand is deprecated but the only zero-dependency option that
       // works across every modern browser. Acceptable for a template demo.
@@ -242,20 +372,30 @@ function initRichText(wrap) {
     sync();
   };
 
-  toolbar.addEventListener('click', (e) => {
+  toolbar.addEventListener('click', e => {
     const btn = e.target.closest('button[data-cmd], button[data-block]');
-    if (!btn) {return;}
+    if (!btn) {
+      return;
+    }
     e.preventDefault();
-    if (btn.dataset.block) {exec('formatBlock', `<${btn.dataset.block}>`);}
-    else {exec(btn.dataset.cmd, btn.dataset.arg);}
+    if (btn.dataset.block) {
+      exec('formatBlock', `<${btn.dataset.block}>`);
+    } else {
+      exec(btn.dataset.cmd, btn.dataset.arg);
+    }
   });
 
   editor.addEventListener('input', sync);
-  editor.addEventListener('keydown', (e) => {
-    if (!(e.metaKey || e.ctrlKey)) {return;}
+  editor.addEventListener('keydown', e => {
+    if (!(e.metaKey || e.ctrlKey)) {
+      return;
+    }
     const map = { b: 'bold', i: 'italic', u: 'underline', k: 'link' };
     const cmd = map[e.key.toLowerCase()];
-    if (cmd) { e.preventDefault(); exec(cmd); }
+    if (cmd) {
+      e.preventDefault();
+      exec(cmd);
+    }
   });
 }
 
@@ -268,22 +408,26 @@ function initRichText(wrap) {
 //   </div>
 // Reads options from data-options (comma-separated) or from a child <select>.
 function initMultiSelect(wrap) {
-  if (wrap.dataset.msInit) {return;}
+  if (wrap.dataset.msInit) {
+    return;
+  }
   wrap.dataset.msInit = '1';
 
   let options;
   const select = wrap.querySelector('select');
   if (select) {
-    options = [...select.options].map((o) => ({ value: o.value, label: o.textContent }));
+    options = [...select.options].map(o => ({ value: o.value, label: o.textContent }));
   } else if (wrap.dataset.options) {
-    options = wrap.dataset.options.split(',').map((s) => s.trim()).filter(Boolean).map((v) => ({ value: v, label: v }));
+    options = wrap.dataset.options
+      .split(',')
+      .map(s => s.trim())
+      .filter(Boolean)
+      .map(v => ({ value: v, label: v }));
   } else {
     options = [];
   }
 
-  const selected = new Set(
-    select ? [...select.selectedOptions].map((o) => o.value) : []
-  );
+  const selected = new Set(select ? [...select.selectedOptions].map(o => o.value) : []);
 
   wrap.innerHTML = `
     <div class="ms-input" tabindex="0">
@@ -293,7 +437,9 @@ function initMultiSelect(wrap) {
     </div>
     <div class="ms-menu" hidden role="listbox"></div>
   `;
-  if (select) {wrap.appendChild(select);}
+  if (select) {
+    wrap.appendChild(select);
+  }
 
   const inputEl = wrap.querySelector('.ms-input');
   const chipsEl = wrap.querySelector('.ms-chips');
@@ -301,83 +447,123 @@ function initMultiSelect(wrap) {
   const menuEl = wrap.querySelector('.ms-menu');
 
   const renderChips = () => {
-    chipsEl.innerHTML = [...selected].map((v) => {
-      const opt = options.find((o) => o.value === v);
-      const label = opt ? opt.label : v;
-      return `<span class="ms-chip">${escapeHtml(label)}<button type="button" data-remove="${escapeAttr(v)}" aria-label="Remove">×</button></span>`;
-    }).join('');
+    chipsEl.innerHTML = [...selected]
+      .map(v => {
+        const opt = options.find(o => o.value === v);
+        const label = opt ? opt.label : v;
+        return `<span class="ms-chip">${escapeHtml(label)}<button type="button" data-remove="${escapeAttr(v)}" aria-label="Remove">×</button></span>`;
+      })
+      .join('');
   };
 
   const renderMenu = () => {
     const q = searchEl.value.trim().toLowerCase();
-    const filtered = options.filter((o) => !selected.has(o.value) && (!q || o.label.toLowerCase().includes(q)));
+    const filtered = options.filter(
+      o => !selected.has(o.value) && (!q || o.label.toLowerCase().includes(q))
+    );
     if (!filtered.length) {
       menuEl.innerHTML = `<div class="ms-empty">${q ? 'No matches' : 'All selected'}</div>`;
     } else {
-      menuEl.innerHTML = filtered.map((o, i) => `
+      menuEl.innerHTML = filtered
+        .map(
+          (o, i) => `
         <button type="button" class="ms-option${i === 0 ? ' active' : ''}" data-value="${escapeAttr(o.value)}">${escapeHtml(o.label)}</button>
-      `).join('');
+      `
+        )
+        .join('');
     }
   };
 
   const sync = () => {
     if (select) {
-      [...select.options].forEach((o) => { o.selected = selected.has(o.value); });
+      [...select.options].forEach(o => {
+        o.selected = selected.has(o.value);
+      });
       select.dispatchEvent(new Event('change', { bubbles: true }));
     }
     wrap.dispatchEvent(new CustomEvent('change', { detail: { values: [...selected] } }));
   };
 
-  const add = (val) => { selected.add(val); renderChips(); renderMenu(); sync(); searchEl.value = ''; searchEl.focus(); };
-  const remove = (val) => { selected.delete(val); renderChips(); renderMenu(); sync(); };
+  const add = val => {
+    selected.add(val);
+    renderChips();
+    renderMenu();
+    sync();
+    searchEl.value = '';
+    searchEl.focus();
+  };
+  const remove = val => {
+    selected.delete(val);
+    renderChips();
+    renderMenu();
+    sync();
+  };
 
-  const open = () => { menuEl.hidden = false; wrap.classList.add('open'); renderMenu(); };
-  const close = () => { menuEl.hidden = true; wrap.classList.remove('open'); };
+  const open = () => {
+    menuEl.hidden = false;
+    wrap.classList.add('open');
+    renderMenu();
+  };
+  const close = () => {
+    menuEl.hidden = true;
+    wrap.classList.remove('open');
+  };
 
-  inputEl.addEventListener('click', () => { searchEl.focus(); open(); });
+  inputEl.addEventListener('click', () => {
+    searchEl.focus();
+    open();
+  });
   searchEl.addEventListener('focus', open);
   searchEl.addEventListener('input', renderMenu);
-  searchEl.addEventListener('keydown', (e) => {
+  searchEl.addEventListener('keydown', e => {
     if (e.key === 'Backspace' && !searchEl.value && selected.size) {
       const last = [...selected].pop();
       remove(last);
     } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
       const opts = [...menuEl.querySelectorAll('.ms-option')];
-      if (!opts.length) {return;}
-      const i = opts.findIndex((o) => o.classList.contains('active'));
-      const ni = e.key === 'ArrowDown' ? (i + 1) % opts.length : (i - 1 + opts.length) % opts.length;
-      opts.forEach((o) => o.classList.remove('active'));
+      if (!opts.length) {
+        return;
+      }
+      const i = opts.findIndex(o => o.classList.contains('active'));
+      const ni =
+        e.key === 'ArrowDown' ? (i + 1) % opts.length : (i - 1 + opts.length) % opts.length;
+      opts.forEach(o => o.classList.remove('active'));
       opts[ni].classList.add('active');
       opts[ni].scrollIntoView({ block: 'nearest' });
     } else if (e.key === 'Enter') {
       e.preventDefault();
       const active = menuEl.querySelector('.ms-option.active');
-      if (active) {add(active.dataset.value);}
-    } else if (e.key === 'Escape') { close(); }
+      if (active) {
+        add(active.dataset.value);
+      }
+    } else if (e.key === 'Escape') {
+      close();
+    }
   });
 
-  menuEl.addEventListener('click', (e) => {
+  menuEl.addEventListener('click', e => {
     const opt = e.target.closest('.ms-option');
-    if (opt) {add(opt.dataset.value);}
+    if (opt) {
+      add(opt.dataset.value);
+    }
   });
-  chipsEl.addEventListener('click', (e) => {
+  chipsEl.addEventListener('click', e => {
     const btn = e.target.closest('[data-remove]');
-    if (btn) {remove(btn.dataset.remove);}
+    if (btn) {
+      remove(btn.dataset.remove);
+    }
   });
 
-  document.addEventListener('click', (e) => {
-    if (!wrap.contains(e.target)) {close();}
+  document.addEventListener('click', e => {
+    if (!wrap.contains(e.target)) {
+      close();
+    }
   });
 
   renderChips();
   renderMenu();
 }
-
-function escapeHtml(s) {
-  return String(s).replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-}
-function escapeAttr(s) { return escapeHtml(s); }
 
 /**
  * Wire up every advanced form control on the page. Idempotent.
